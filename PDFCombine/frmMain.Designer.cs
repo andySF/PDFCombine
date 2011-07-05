@@ -38,9 +38,12 @@
             this.columnHeaderPath = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderPages = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderSize = new System.Windows.Forms.ColumnHeader();
-            this.columnHeaderSecurityLevel = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaderStatus = new System.Windows.Forms.ColumnHeader();
             this.lblTotalSize = new System.Windows.Forms.Label();
             this.backgroundWorkerAddItemsToList = new System.ComponentModel.BackgroundWorker();
+            this.lblProgress = new System.Windows.Forms.Label();
+            this.backgroundWorkerCombine = new System.ComponentModel.BackgroundWorker();
+            this.btnRemoveErrors = new System.Windows.Forms.Button();
             this.btnCancelOperation = new System.Windows.Forms.Button();
             this.btnMoveItemUp = new System.Windows.Forms.Button();
             this.btnMoveItemDown = new System.Windows.Forms.Button();
@@ -48,8 +51,7 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.btnCombinePDFs = new System.Windows.Forms.Button();
             this.btnSelectPDFs = new System.Windows.Forms.Button();
-            this.lblProgress = new System.Windows.Forms.Label();
-            this.backgroundWorkerCombine = new System.ComponentModel.BackgroundWorker();
+            this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // openPdfDialog
@@ -98,7 +100,7 @@
             this.columnHeaderPath,
             this.columnHeaderPages,
             this.columnHeaderSize,
-            this.columnHeaderSecurityLevel});
+            this.columnHeaderStatus});
             this.lvPDFs.FullRowSelect = true;
             this.lvPDFs.GridLines = true;
             this.lvPDFs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -110,8 +112,10 @@
             this.lvPDFs.TabIndex = 5;
             this.lvPDFs.UseCompatibleStateImageBehavior = false;
             this.lvPDFs.View = System.Windows.Forms.View.Details;
+            this.lvPDFs.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvPDFs_MouseDoubleClick);
             this.lvPDFs.DragDrop += new System.Windows.Forms.DragEventHandler(this.lvPDFs_DragDrop);
             this.lvPDFs.DragEnter += new System.Windows.Forms.DragEventHandler(this.lvPDFs_DragEnter);
+            this.lvPDFs.DragLeave += new System.EventHandler(this.lvPDFs_DragLeave);
             this.lvPDFs.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.lvPDFs_ItemDrag);
             this.lvPDFs.DragOver += new System.Windows.Forms.DragEventHandler(this.lvPDFs_DragOver);
             // 
@@ -130,10 +134,10 @@
             this.columnHeaderSize.Text = "Size";
             this.columnHeaderSize.Width = 110;
             // 
-            // columnHeaderSecurityLevel
+            // columnHeaderStatus
             // 
-            this.columnHeaderSecurityLevel.Text = "Security";
-            this.columnHeaderSecurityLevel.Width = 124;
+            this.columnHeaderStatus.Text = "Status";
+            this.columnHeaderStatus.Width = 151;
             // 
             // lblTotalSize
             // 
@@ -154,6 +158,36 @@
             this.backgroundWorkerAddItemsToList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerAddItemsToList_RunWorkerCompleted);
             this.backgroundWorkerAddItemsToList.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerAddItemsToList_ProgressChanged);
             // 
+            // lblProgress
+            // 
+            this.lblProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblProgress.AutoSize = true;
+            this.lblProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgress.ForeColor = System.Drawing.Color.Black;
+            this.lblProgress.Location = new System.Drawing.Point(40, 559);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.Size = new System.Drawing.Size(51, 16);
+            this.lblProgress.TabIndex = 11;
+            this.lblProgress.Text = "label1";
+            // 
+            // backgroundWorkerCombine
+            // 
+            this.backgroundWorkerCombine.WorkerReportsProgress = true;
+            this.backgroundWorkerCombine.WorkerSupportsCancellation = true;
+            this.backgroundWorkerCombine.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerCombine_DoWork);
+            this.backgroundWorkerCombine.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerCombine_RunWorkerCompleted);
+            this.backgroundWorkerCombine.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerCombine_ProgressChanged);
+            // 
+            // btnRemoveErrors
+            // 
+            this.btnRemoveErrors.Image = global::PDFCombine.Properties.Resources.error_delete;
+            this.btnRemoveErrors.Location = new System.Drawing.Point(8, 439);
+            this.btnRemoveErrors.Name = "btnRemoveErrors";
+            this.btnRemoveErrors.Size = new System.Drawing.Size(27, 30);
+            this.btnRemoveErrors.TabIndex = 12;
+            this.toolTipInfo.SetToolTip(this.btnRemoveErrors, "Remove not supported files");
+            this.btnRemoveErrors.UseVisualStyleBackColor = true;
+            // 
             // btnCancelOperation
             // 
             this.btnCancelOperation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -163,7 +197,6 @@
             this.btnCancelOperation.Name = "btnCancelOperation";
             this.btnCancelOperation.Size = new System.Drawing.Size(117, 31);
             this.btnCancelOperation.TabIndex = 10;
-            this.btnCancelOperation.Text = "Cancel Operation";
             this.btnCancelOperation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnCancelOperation.UseVisualStyleBackColor = true;
             this.btnCancelOperation.Click += new System.EventHandler(this.btnCancelOperation_Click);
@@ -185,6 +218,7 @@
             this.btnMoveItemDown.Name = "btnMoveItemDown";
             this.btnMoveItemDown.Size = new System.Drawing.Size(23, 23);
             this.btnMoveItemDown.TabIndex = 8;
+            this.toolTipInfo.SetToolTip(this.btnMoveItemDown, "Move selectet items down in the list");
             this.btnMoveItemDown.UseVisualStyleBackColor = true;
             this.btnMoveItemDown.Click += new System.EventHandler(this.btnMoveItemDown_Click);
             // 
@@ -237,31 +271,12 @@
             this.btnSelectPDFs.UseVisualStyleBackColor = true;
             this.btnSelectPDFs.Click += new System.EventHandler(this.btnSelectPDFs_Click);
             // 
-            // lblProgress
-            // 
-            this.lblProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblProgress.AutoSize = true;
-            this.lblProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProgress.ForeColor = System.Drawing.Color.Black;
-            this.lblProgress.Location = new System.Drawing.Point(40, 559);
-            this.lblProgress.Name = "lblProgress";
-            this.lblProgress.Size = new System.Drawing.Size(51, 16);
-            this.lblProgress.TabIndex = 11;
-            this.lblProgress.Text = "label1";
-            // 
-            // backgroundWorkerCombine
-            // 
-            this.backgroundWorkerCombine.WorkerReportsProgress = true;
-            this.backgroundWorkerCombine.WorkerSupportsCancellation = true;
-            this.backgroundWorkerCombine.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerCombine_DoWork);
-            this.backgroundWorkerCombine.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerCombine_RunWorkerCompleted);
-            this.backgroundWorkerCombine.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerCombine_ProgressChanged);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(966, 604);
+            this.Controls.Add(this.btnRemoveErrors);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.btnCancelOperation);
             this.Controls.Add(this.btnMoveItemUp);
@@ -304,8 +319,10 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerAddItemsToList;
         private System.Windows.Forms.Button btnCancelOperation;
         private System.Windows.Forms.Label lblProgress;
-        private System.Windows.Forms.ColumnHeader columnHeaderSecurityLevel;
+        private System.Windows.Forms.ColumnHeader columnHeaderStatus;
         private System.ComponentModel.BackgroundWorker backgroundWorkerCombine;
+        private System.Windows.Forms.Button btnRemoveErrors;
+        private System.Windows.Forms.ToolTip toolTipInfo;
     }
 }
 

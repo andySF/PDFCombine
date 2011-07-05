@@ -111,31 +111,28 @@ namespace PDFCombine
             }
         }
 
-        
-
         public int PdfPageCount { get; set; }
 
-        public String PdfSecurityLevel { get; set; }
+        public String PdfInfo { get; set; }
 
         public void ReadThisPDF(String caleFisierPDF)
         {
             try
             {
+                PdfInfo = "Ready";
                 PdfDocument fisierPDF = new PdfDocument();
                 fisierPDF = PdfReader.Open(caleFisierPDF, PdfDocumentOpenMode.Import);
                 PdfPageCount = fisierPDF.PageCount;
-                PdfSecurityLevel = fisierPDF.SecuritySettings.DocumentSecurityLevel.ToString();
             }
-            catch
+            catch(Exception ex)
             {
                 PdfPageCount= 0;
-                PdfSecurityLevel = "-";
+                PdfInfo = ex.Message;
 
             }
         }
 
         public double AproximativeOutputSize { get; set; }
-
 
         public string GetPdfFileSize(String caleFisierPDF)
         {

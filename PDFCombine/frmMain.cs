@@ -8,8 +8,6 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 
-
-
 namespace PDFCombine
 {
     public partial class frmMain : Form
@@ -23,35 +21,13 @@ namespace PDFCombine
         String imageFile = "image";
         String combineButtonText = "Combine This Files";
         int totalOutputPages = 0;
+        int noOfInvalidFiles = 0;
         CanelOperationCallerEnum CanelOperationCaller;
+
         public frmMain()
         {
             InitializeComponent();
-            
-  
-            lblProgress.Text = String.Empty;
-
-            //setting UI for the first time
-            btnClear.Visible = false;
-            
-            btnCancelOperation.Visible = false;
-            
-            btnCombinePDFs.Visible = false;
-            
-            lblProgress.Visible = false;
-            lblProgress.Text = String.Empty;
-            
-            lblTotalSize.Visible = false;
-            lblTotalSize.Text = String.Empty;
-
-            btnMoveItemDown.Enabled = false;
-            btnMoveItemUp.Enabled = false;
-            btnRemoveFromList.Enabled = false;
-
-            cbWriteDetails.Enabled = false;
-            cbOpenFile.Enabled = false;
-
-
+            SetUiToApplicationStartDefault();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -76,10 +52,14 @@ namespace PDFCombine
                 if (itm.Tag.ToString() == supportedPDF)
                     lvPDFs.Items.Add((ListViewItem)o).ImageIndex=0;
                 else if (itm.Tag.ToString() == unsupportedPDF)
+                {
                     lvPDFs.Items.Add((ListViewItem)o).ImageIndex = 1;
+                    noOfInvalidFiles++;
+                }
                 else if (itm.Tag.ToString() == imageFile)
                     lvPDFs.Items.Add((ListViewItem)o).ImageIndex = 2;
 
+                lvPDFs.Items[lvPDFs.Items.Count - 1].EnsureVisible();
                
             }
         }
@@ -103,49 +83,20 @@ namespace PDFCombine
         {
             if (!backgroundWorkerAddItemsToList.IsBusy)
             {
+                SetUiForOperationInProgress(CanelOperationCallerEnum.Import);
                 backgroundWorkerAddItemsToList.RunWorkerAsync(path);
-                btnSelectPDFs.Enabled = false;
-                btnCombinePDFs.Visible = false;
-                lblProgress.Visible = true;
-                btnClear.Enabled = false;
-                btnRemoveFromList.Enabled = false;
-                btnMoveItemDown.Enabled = false;
-                btnMoveItemUp.Enabled = false;
-                lvPDFs.AllowDrop = false;
-                lblProgress.Text = "Preparing...";
-                btnCancelOperation.Visible = true;
-                CanelOperationCaller = CanelOperationCallerEnum.Import;
+
             }
 
         }
 
         private void backgroundWorkerAddItemsToList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            btnCancelOperation.Enabled = true;
-            lblProgress.Visible = false;
-            lblProgress.Text = String.Empty;
-            btnSelectPDFs.Enabled = true;
-            btnCancelOperation.Visible = false;
-            CanelOperationCaller = CanelOperationCallerEnum.Nobody;
-            lvPDFs.AllowDrop = true;
-            
-
-            if (lvPDFs.Items.Count != 0)
+            SetUiBasedOnItemsInList();
+            if (noOfInvalidFiles != 0)
             {
-                btnCombinePDFs.Visible = true;
-                btnCombinePDFs.Enabled = true;
-                btnCombinePDFs.Text = combineButtonText;
-
-                totalFilesForImport = String.Empty;
-                btnClear.Enabled = true;
-                btnRemoveFromList.Enabled = true;
-                btnMoveItemDown.Enabled = true;
-                btnMoveItemUp.Enabled = true;
-            }
-            if (lvPDFs.Items.Count == 1)
-            {
-                btnCombinePDFs.Enabled = false;
-                btnCombinePDFs.Text = "Add more files";
+                MessageBox.Show(noOfInvalidFiles.ToString() + " Files was not imported", "Atention!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                noOfInvalidFiles = 0;
             }
         }
 
@@ -194,7 +145,7 @@ namespace PDFCombine
                                 totalOutputPages = totalOutputPages + 1;
                                 //size
                                 col[2] = pdf.GetPdfFileSize(path);
-                                col[3] = "image";
+                                col[3] = pdf.PdfInfo;
                                 item = new ListViewItem(col);
                                 item.Tag = imageFile;
 
@@ -222,7 +173,7 @@ namespace PDFCombine
                                 totalOutputPages = totalOutputPages + pages;
                                 //size
                                 col[2] = pdf.GetPdfFileSize(path);
-                                col[3] = pdf.PdfSecurityLevel;
+                                col[3] = pdf.PdfInfo;
                                 item = new ListViewItem(col);
                                 item.Tag = supportedPDF;
 
@@ -243,7 +194,7 @@ namespace PDFCombine
                                 col[1] = "-";
                                 //size
                                 col[2] = "-";
-                                col[3] = pdf.PdfSecurityLevel;
+                                col[3] = pdf.PdfInfo;
                                 item = new ListViewItem(col);
                                 item.Tag = unsupportedPDF;
                                 AddItem(item);
@@ -273,11 +224,8 @@ namespace PDFCombine
                 pdf.writeDetails = cbWriteDetails.Checked;
                 pdf.caleOutput = saveFile.FileName;
 
-                btnCombinePDFs.Visible = false;
-                lblProgress.Visible = true;
-                btnCancelOperation.Visible = true;
-                CanelOperationCaller = CanelOperationCallerEnum.Combine;
-
+                SetUiForOperationInProgress(CanelOperationCallerEnum.Combine);
+                
                 backgroundWorkerCombine.RunWorkerAsync();
 
                 if (cbOpenFile.Checked)
@@ -317,24 +265,8 @@ namespace PDFCombine
                 MessageBox.Show("Operation has been canceled","CANCELED",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
             }
 
-            //fă funcții pt prepareGuiForOperation și altele
-            ClearList();
-
-            //lvPDFs.Items.Clear();
-            //caleFisierePDF.Clear();
-            //pdf.AproximativeOutputSize = 0;
-            //totalOutputPages = 0;
-            //lblTotalSize.Text = String.Empty;
-            //btnMoveItemUp.Enabled = false;
-            //btnMoveItemDown.Enabled = false;
-            //btnRemoveFromList.Enabled = false;
-            //btnCombinePDFs.Visible = false;
-            btnCombinePDFs.Visible = true;
-            pdf.writeDetails = cbWriteDetails.Checked;
-            pdf.caleOutput = String.Empty;
-            lblProgress.Visible = false;
-            btnCancelOperation.Visible = false;
-            CanelOperationCaller = CanelOperationCallerEnum.Nobody;
+            SetUiToApplicationStartDefault();
+            MessageBox.Show("GATA, Done, Fine", "ok ok ok", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
@@ -348,6 +280,42 @@ namespace PDFCombine
         }
 
         private void btnCancelOperation_Click(object sender, EventArgs e)
+        {
+            SetUiForCancelOperation(CanelOperationCaller);
+        }
+    
+        private void btnSelectPDFs_Click(object sender, EventArgs e)
+        {
+            if (openPdfDialog.ShowDialog() == DialogResult.OK)
+            {
+                AddItemToList(openPdfDialog.FileNames);
+            }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            SetUiToApplicationStartDefault();
+        }
+        #region UI
+
+        private void SetUiWhileCombiningFiles()
+        {
+
+            btnCombinePDFs.Visible = false;
+            btnSelectPDFs.Visible = false;
+            btnClear.Visible = false;
+            btnRemoveFromList.Visible = false;
+            btnMoveItemDown.Visible = false;
+            btnMoveItemUp.Visible = false;
+            
+
+            lblProgress.Visible = true;
+            btnCancelOperation.Visible = true;
+            CanelOperationCaller = CanelOperationCallerEnum.Combine;
+
+        }
+
+        private void SetUiForCancelOperation(CanelOperationCallerEnum CanelOperationCaller)
         {
             switch (CanelOperationCaller)
             {
@@ -369,32 +337,133 @@ namespace PDFCombine
                     break;
             }
         }
-    
-        private void btnSelectPDFs_Click(object sender, EventArgs e)
+
+        private void SetUiForOperationInProgress(CanelOperationCallerEnum _CanelOperationCaller)
         {
-            if (openPdfDialog.ShowDialog() == DialogResult.OK)
+            btnSelectPDFs.Enabled = false;
+            btnCombinePDFs.Visible = false;
+
+            cbOpenFile.Enabled = false;
+            cbWriteDetails.Enabled = false;
+
+            lblProgress.Visible = true;
+            lblProgress.Text = "Preparing...";
+
+            btnClear.Visible = false;
+
+            btnRemoveFromList.Enabled = false;
+            btnMoveItemDown.Enabled = false;
+            btnMoveItemUp.Enabled = false;
+
+            lvPDFs.AllowDrop = false;
+
+            btnCancelOperation.Visible = true;
+            btnCancelOperation.Enabled = true;
+
+            CanelOperationCaller = _CanelOperationCaller;
+            if (_CanelOperationCaller == CanelOperationCallerEnum.Import)
+                btnCancelOperation.Text = "Cancel Import";
+            if (_CanelOperationCaller == CanelOperationCallerEnum.Combine)
+                btnCancelOperation.Text = "Cancel Combine";
+        }
+
+        private void SetUiBasedOnItemsInList()
+        {
+
+            btnClear.Visible = true;
+
+            lblProgress.Visible = false;
+            lblProgress.Text = String.Empty;
+
+            btnSelectPDFs.Enabled = true;
+            btnCancelOperation.Visible = false;
+            lvPDFs.AllowDrop = true;
+
+            if (lvPDFs.Items.Count != 0 && lvPDFs.Items.Count > 1)
             {
-                AddItemToList(openPdfDialog.FileNames);
+                btnCombinePDFs.Visible = true;
+                btnCombinePDFs.Enabled = true;
+                btnCombinePDFs.Text = combineButtonText;
+
+                totalFilesForImport = String.Empty;
+
+                btnRemoveFromList.Enabled = true;
+                btnMoveItemDown.Enabled = true;
+                btnMoveItemUp.Enabled = true;
+
+                cbWriteDetails.Enabled = true;
+                cbOpenFile.Enabled = true;
+            }
+            if (lvPDFs.Items.Count == 1)
+            {
+                if (lvPDFs.Items[0].Tag.ToString() == imageFile)
+                {
+                    btnCombinePDFs.Visible = true;
+                    btnCombinePDFs.Enabled = true;
+                    btnCombinePDFs.Text = "Create PDF from image";
+
+                    totalFilesForImport = String.Empty;
+
+                    btnRemoveFromList.Enabled = true;
+                    btnMoveItemDown.Enabled = false;
+                    btnMoveItemUp.Enabled = false;
+
+                    cbWriteDetails.Enabled = true;
+                    cbOpenFile.Enabled = true;
+                }
+                else
+                {
+
+                    btnRemoveFromList.Enabled = true;
+                    btnCombinePDFs.Visible = true;
+                    btnCombinePDFs.Enabled = false;
+                    btnCombinePDFs.Text = "Add more files";
+                }
+            }
+            if (lvPDFs.Items.Count == 0)
+            {
+                SetUiToApplicationStartDefault();
             }
         }
 
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            ClearList();
-        }
-
-        private void ClearList()
+        private void SetUiToApplicationStartDefault()
         {
             lvPDFs.Items.Clear();
             caleFisierePDF.Clear();
             pdf.AproximativeOutputSize = 0;
             totalOutputPages = 0;
+
+            btnSelectPDFs.Visible = true;
+            btnSelectPDFs.Enabled = true;
+            
             lblTotalSize.Text = String.Empty;
-            btnMoveItemUp.Enabled = false;
-            btnMoveItemDown.Enabled = false;
-            btnRemoveFromList.Enabled = false;
+
+            lblProgress.Text = String.Empty;
+
+            //setting UI for the first time
+            btnClear.Visible = false;
+
+            btnCancelOperation.Visible = false;
+
             btnCombinePDFs.Visible = false;
+
+            lblProgress.Visible = false;
+            lblProgress.Text = String.Empty;
+
+            lblTotalSize.Visible = false;
+            lblTotalSize.Text = String.Empty;
+
+            btnMoveItemDown.Enabled = false;
+            btnMoveItemUp.Enabled = false;
+            btnRemoveFromList.Enabled = false;
+
+            cbWriteDetails.Enabled = false;
+            cbOpenFile.Enabled = false;
+
+            CanelOperationCaller = CanelOperationCallerEnum.Nobody;
         }
+
+        #endregion UI
 
         #region  DRAG AND DROP METHODS
 
@@ -458,10 +527,11 @@ namespace PDFCombine
                     //Insert the item at the mouse pointer.
                     ListViewItem insertItem = (ListViewItem)dragItem.Clone();
                     lvPDFs.Items.Insert(itemIndex, insertItem);
+                    lvPDFs.Items[itemIndex].Selected = true;
+
                     //Removes the item from the initial location while 
                     //the item is moved to the new location.
                     lvPDFs.Items.Remove(dragItem);
-                    lvPDFs.Items[itemIndex].Selected = true;
                 }
 
             }
@@ -474,14 +544,22 @@ namespace PDFCombine
 
         private void lvPDFs_DragOver(object sender, DragEventArgs e)
         {
+           
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-
+                //Point pt = lvPDFs.PointToClient(new Point(e.X, e.Y));
+                //ListViewItem currentItemUnder = lvPDFs.GetItemAt(pt.X, pt.Y);
+            
                 e.Effect = DragDropEffects.Link;
-                Point pt = lvPDFs.PointToClient(new Point(e.X, e.Y));
-                ListViewItem itemUnder = lvPDFs.GetItemAt(pt.X, pt.Y);
             }
         }
+
+        private void lvPDFs_DragLeave(object sender, EventArgs e)
+        {
+            
+            
+        }
+
 
         #endregion DRAG AND DROP METHODS
 
@@ -492,6 +570,7 @@ namespace PDFCombine
             {
                 lvPDFs.Items.Remove(item);
             }
+            SetUiBasedOnItemsInList();
         }
 
         //Based on microsoft example
@@ -573,6 +652,16 @@ namespace PDFCombine
             }
         }
         #endregion ORDER MOETHODS
+
+        private void lvPDFs_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (lvPDFs.SelectedItems.Count != 0)
+            {
+                Process.Start(lvPDFs.SelectedItems[0].SubItems[0].Text);
+            }
+        }
+
+
 
 
 
