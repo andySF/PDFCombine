@@ -9,3 +9,13 @@ C:\Users\andy\My Projects\PDFCombine\PDFCombine\obj\Debug\PDFCombine.Properties.
 C:\Users\andy\My Projects\PDFCombine\PDFCombine\obj\Debug\PDFCombine.csproj.GenerateResource.Cache
 C:\Users\andy\My Projects\PDFCombine\PDFCombine\obj\Debug\PDFCombine.exe
 C:\Users\andy\My Projects\PDFCombine\PDFCombine\obj\Debug\PDFCombine.pdb
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\Debug\PDFCombine.exe
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\Debug\PDFCombine.pdb
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\bin\Debug\PDFCombine.exe
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\bin\Debug\PDFCombine.pdb
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\bin\Debug\PdfSharp.xml
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\bin\Debug\de\PdfSharp.resources.dll
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\Debug\PDFCombine.frmMain.resources
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\Debug\PDFCombine.Properties.Resources.resources
+C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\Debug\PDFCombine.csproj.GenerateResource.Cache

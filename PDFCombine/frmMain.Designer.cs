@@ -52,6 +52,8 @@
             this.btnCombinePDFs = new System.Windows.Forms.Button();
             this.btnSelectPDFs = new System.Windows.Forms.Button();
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openPdfDialog
@@ -198,6 +200,7 @@
             this.btnCancelOperation.Size = new System.Drawing.Size(117, 31);
             this.btnCancelOperation.TabIndex = 10;
             this.btnCancelOperation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolTipInfo.SetToolTip(this.btnCancelOperation, "Cancel");
             this.btnCancelOperation.UseVisualStyleBackColor = true;
             this.btnCancelOperation.Click += new System.EventHandler(this.btnCancelOperation_Click);
             // 
@@ -208,6 +211,7 @@
             this.btnMoveItemUp.Name = "btnMoveItemUp";
             this.btnMoveItemUp.Size = new System.Drawing.Size(23, 23);
             this.btnMoveItemUp.TabIndex = 9;
+            this.toolTipInfo.SetToolTip(this.btnMoveItemUp, "Move selectet files up in the list");
             this.btnMoveItemUp.UseVisualStyleBackColor = true;
             this.btnMoveItemUp.Click += new System.EventHandler(this.btnMoveItemUp_Click);
             // 
@@ -218,7 +222,7 @@
             this.btnMoveItemDown.Name = "btnMoveItemDown";
             this.btnMoveItemDown.Size = new System.Drawing.Size(23, 23);
             this.btnMoveItemDown.TabIndex = 8;
-            this.toolTipInfo.SetToolTip(this.btnMoveItemDown, "Move selectet items down in the list");
+            this.toolTipInfo.SetToolTip(this.btnMoveItemDown, "Move selectet files down in the list");
             this.btnMoveItemDown.UseVisualStyleBackColor = true;
             this.btnMoveItemDown.Click += new System.EventHandler(this.btnMoveItemDown_Click);
             // 
@@ -229,6 +233,7 @@
             this.btnRemoveFromList.Name = "btnRemoveFromList";
             this.btnRemoveFromList.Size = new System.Drawing.Size(23, 23);
             this.btnRemoveFromList.TabIndex = 7;
+            this.toolTipInfo.SetToolTip(this.btnRemoveFromList, "Remove selected files");
             this.btnRemoveFromList.UseVisualStyleBackColor = true;
             this.btnRemoveFromList.Click += new System.EventHandler(this.btnRemoveFromList_Click);
             // 
@@ -242,6 +247,7 @@
             this.btnClear.Size = new System.Drawing.Size(109, 31);
             this.btnClear.TabIndex = 2;
             this.btnClear.Text = "Clear list";
+            this.toolTipInfo.SetToolTip(this.btnClear, "Clear list");
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
@@ -256,6 +262,7 @@
             this.btnCombinePDFs.Size = new System.Drawing.Size(328, 63);
             this.btnCombinePDFs.TabIndex = 0;
             this.btnCombinePDFs.Text = "Combine this files";
+            this.toolTipInfo.SetToolTip(this.btnCombinePDFs, "Combine files");
             this.btnCombinePDFs.UseVisualStyleBackColor = true;
             this.btnCombinePDFs.Click += new System.EventHandler(this.btnCombinePDFs_Click);
             // 
@@ -268,14 +275,36 @@
             this.btnSelectPDFs.Size = new System.Drawing.Size(192, 31);
             this.btnSelectPDFs.TabIndex = 0;
             this.btnSelectPDFs.Text = "Select Files";
+            this.toolTipInfo.SetToolTip(this.btnSelectPDFs, "Select the files you want to combine");
             this.btnSelectPDFs.UseVisualStyleBackColor = true;
             this.btnSelectPDFs.Click += new System.EventHandler(this.btnSelectPDFs_Click);
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(211, 480);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(380, 95);
+            this.listBox1.TabIndex = 13;
+            // 
+            // button1
+            // 
+            this.button1.Image = global::PDFCombine.Properties.Resources.arrow_down;
+            this.button1.Location = new System.Drawing.Point(211, 569);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(23, 23);
+            this.button1.TabIndex = 14;
+            this.toolTipInfo.SetToolTip(this.button1, "Move selectet files down in the list");
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(966, 604);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.btnRemoveErrors);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.btnCancelOperation);
@@ -323,6 +352,8 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerCombine;
         private System.Windows.Forms.Button btnRemoveErrors;
         private System.Windows.Forms.ToolTip toolTipInfo;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

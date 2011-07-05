@@ -11,13 +11,14 @@ using System.Drawing.Drawing2D;
 
 namespace PDFCombine
 {
-    class PDFUtils
+    class FileUtils
     {
-
-        public List<String> caleFisierePDF { get; set; }
+        
+        public Dictionary<int,string> caleFisierePDF { get; set; }
         public bool writeDetails { get; set; }
         public String caleOutput { get; set; }
 
+        
         public void CombinePDFs(object sender)
         {
             try
@@ -34,7 +35,7 @@ namespace PDFCombine
                 PdfDocument fisierPDF;
                 int pgnr = 0;
 
-                foreach (String caleFisierPDF in caleFisierePDF)
+                foreach (String caleFisierPDF in caleFisierePDF.Values)
                 {
 
                     bool isPDF = false;
@@ -134,7 +135,7 @@ namespace PDFCombine
 
         public double AproximativeOutputSize { get; set; }
 
-        public string GetPdfFileSize(String caleFisierPDF)
+        public string GetFileSize(String caleFisierPDF)
         {
             FileInfo file = new FileInfo(caleFisierPDF);
             double byteCount = file.Length;
