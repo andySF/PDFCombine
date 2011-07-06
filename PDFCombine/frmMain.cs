@@ -17,8 +17,8 @@ namespace PDFCombine
         //SortedList<int, String> caleFisierePDF = new SortedList<int, string>();
         List<String> caleFisierePDF = new List<string>();
         string totalFilesForImport = string.Empty;
-        String unsupportedPDF = "supported";
-        String supportedPDF = "unsupported";
+        String unsupportedPDF = "unsupported";
+        String supportedPDF = "supported";
         String imageFile = "image";
         String combineButtonText = "Combine This Files";
         int totalOutputPages = 0;
@@ -64,21 +64,6 @@ namespace PDFCombine
 
                 lvPDFs.Items[lvPDFs.Items.Count - 1].EnsureVisible();
                
-            }
-        }
-
-        //delegate for accessing lvPDFs from backgroundworker
-        private delegate void SetLblTotalSizeTextCallback(object o);
-        private void SetLblTotalSizeText(object o)
-        {
-            if (lblTotalSize.InvokeRequired)
-            {
-                SetLblTotalSizeTextCallback d = new SetLblTotalSizeTextCallback(SetLblTotalSizeText);
-                this.Invoke(d, new object[] { o });
-            }
-            else
-            {
-                lblTotalSize.Text = o.ToString();
             }
         }
 
@@ -156,6 +141,9 @@ namespace PDFCombine
                                 item.Tag = imageFile;
                                 //lvPDFs.Refresh();
                                 //add a complete verified version of file to list
+                                item.Tag = supportedPDF;
+
+                                AddItem(item, path);
                         }
                         if (isPDF)
                         {
@@ -176,7 +164,7 @@ namespace PDFCombine
                                 col[3] = Files.PdfInfo;
                                 item = new ListViewItem(col);
                                 item.Tag = supportedPDF;
-                                
+
                             }
                             if (pages == 0)
                             {
@@ -192,9 +180,9 @@ namespace PDFCombine
                                 item.Tag = unsupportedPDF;
                             }
 
+                            AddItem(item, path);
                         }//isPDF
-                        AddItem(item,path);
-                        SetLblTotalSizeText("Aproximative output size= " + Files.FormatSize(Files.AproximativeOutputSize));
+                        
                         //lvPDFs.Refresh();
                         //add a complete verified version of file to list
                     }//if isFile
@@ -218,8 +206,10 @@ namespace PDFCombine
                 foreach (ListViewItem itm in lvPDFs.Items)
                 {
                     String path = itm.SubItems[0].Text;
-                    if (File.Exists(path))
-                        caleFisierePDF.Add(path);
+                    if (itm.Tag.ToString() == supportedPDF)
+                        if (File.Exists(path))
+                            caleFisierePDF.Add(path);
+                            
                 }
 
                 Files.caleFisierePDF = caleFisierePDF;
@@ -449,10 +439,6 @@ namespace PDFCombine
             btnSelectPDFs.Visible = true;
             btnSelectPDFs.Enabled = true;
             
-            lblTotalSize.Text = String.Empty;
-
-            lblProgress.Text = String.Empty;
-
             //setting UI for the first time
             btnClear.Visible = false;
 
@@ -462,9 +448,6 @@ namespace PDFCombine
 
             lblProgress.Visible = false;
             lblProgress.Text = String.Empty;
-
-            lblTotalSize.Visible = false;
-            lblTotalSize.Text = String.Empty;
 
             btnMoveItemDown.Enabled = false;
             btnMoveItemUp.Enabled = false;
@@ -690,6 +673,18 @@ namespace PDFCombine
                 
                 Process.Start(lvPDFs.SelectedItems[0].SubItems[0].Text);
             }
+        }
+
+        private void btnRemoveErrors_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem itm in lvPDFs.Items)
+            {
+                if (itm.Tag.ToString() == unsupportedPDF)
+                    itm.Remove();
+            }
+            noOfCurrentInvalidFiles = 0;
+            noOfTotalErrorFiles = 0;
+            SetUiBasedOnItemsInList();
         }
 
       

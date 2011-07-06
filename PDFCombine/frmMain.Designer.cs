@@ -39,7 +39,6 @@
             this.columnHeaderPages = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderSize = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderStatus = new System.Windows.Forms.ColumnHeader();
-            this.lblTotalSize = new System.Windows.Forms.Label();
             this.backgroundWorkerAddItemsToList = new System.ComponentModel.BackgroundWorker();
             this.lblProgress = new System.Windows.Forms.Label();
             this.backgroundWorkerCombine = new System.ComponentModel.BackgroundWorker();
@@ -139,17 +138,6 @@
             this.columnHeaderStatus.Text = "Status";
             this.columnHeaderStatus.Width = 151;
             // 
-            // lblTotalSize
-            // 
-            this.lblTotalSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTotalSize.AutoSize = true;
-            this.lblTotalSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalSize.Location = new System.Drawing.Point(670, 472);
-            this.lblTotalSize.Name = "lblTotalSize";
-            this.lblTotalSize.Size = new System.Drawing.Size(35, 13);
-            this.lblTotalSize.TabIndex = 6;
-            this.lblTotalSize.Text = "label1";
-            // 
             // backgroundWorkerAddItemsToList
             // 
             this.backgroundWorkerAddItemsToList.WorkerReportsProgress = true;
@@ -187,6 +175,7 @@
             this.btnRemoveErrors.TabIndex = 12;
             this.toolTipInfo.SetToolTip(this.btnRemoveErrors, "Remove not supported files");
             this.btnRemoveErrors.UseVisualStyleBackColor = true;
+            this.btnRemoveErrors.Click += new System.EventHandler(this.btnRemoveErrors_Click);
             // 
             // btnCancelOperation
             // 
@@ -288,7 +277,6 @@
             this.Controls.Add(this.btnMoveItemUp);
             this.Controls.Add(this.btnMoveItemDown);
             this.Controls.Add(this.btnRemoveFromList);
-            this.Controls.Add(this.lblTotalSize);
             this.Controls.Add(this.lvPDFs);
             this.Controls.Add(this.cbOpenFile);
             this.Controls.Add(this.cbWriteDetails);
@@ -318,7 +306,6 @@
         private System.Windows.Forms.ColumnHeader columnHeaderPath;
         private System.Windows.Forms.ColumnHeader columnHeaderPages;
         private System.Windows.Forms.ColumnHeader columnHeaderSize;
-        private System.Windows.Forms.Label lblTotalSize;
         private System.Windows.Forms.Button btnRemoveFromList;
         private System.Windows.Forms.Button btnMoveItemDown;
         private System.Windows.Forms.Button btnMoveItemUp;
