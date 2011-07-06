@@ -15,7 +15,7 @@ namespace PDFCombine
         FileUtils Files = new FileUtils();
         ListViewItem item;
         //SortedList<int, String> caleFisierePDF = new SortedList<int, string>();
-        Dictionary<int, String> caleFisierePDF = new Dictionary<int, string>();
+        List<String> caleFisierePDF = new List<string>();
         string totalFilesForImport = string.Empty;
         String unsupportedPDF = "supported";
         String supportedPDF = "unsupported";
@@ -62,7 +62,6 @@ namespace PDFCombine
                 else if (itm.Tag.ToString() == imageFile)
                     lvPDFs.Items.Add(itm).ImageIndex = 2;
 
-                caleFisierePDF.Add(itm.Index,path);
                 lvPDFs.Items[lvPDFs.Items.Count - 1].EnsureVisible();
                
             }
@@ -215,18 +214,25 @@ namespace PDFCombine
             saveFile.Filter = "\"Combined PDF\"|*.PDF";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
+
+                foreach (ListViewItem itm in lvPDFs.Items)
+                {
+                    String path = itm.SubItems[0].Text;
+                    if (File.Exists(path))
+                        caleFisierePDF.Add(path);
+                }
+
                 Files.caleFisierePDF = caleFisierePDF;
+
                 Files.writeDetails = cbWriteDetails.Checked;
+
+                //verifica daca fisierul este accesibil
                 Files.caleOutput = saveFile.FileName;
 
                 SetUiForOperationInProgress(CanelOperationCallerEnum.Combine);
                 
                 backgroundWorkerCombine.RunWorkerAsync();
 
-                if (cbOpenFile.Checked)
-                {
-                    Process.Start(saveFile.FileName);
-                }
             }
         }
 
@@ -262,6 +268,12 @@ namespace PDFCombine
 
             SetUiToApplicationStartDefault();
             MessageBox.Show("GATA, Done, Fine", "ok ok ok", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+            if (cbOpenFile.Checked)
+            {
+                //Process.Start(saveFile.FileName);
+            }
 
         }
 
@@ -619,19 +631,12 @@ namespace PDFCombine
                 ListViewItem insertItem = (ListViewItem)dragItem.Clone();
                 lvPDFs.Items.Insert(itemIndex, insertItem);
 
-                //reorder dictionary
-                String itemValue = caleFisierePDF[itemIndex];
-                String dragValue = caleFisierePDF[dragItem.Index-1];
-                caleFisierePDF[itemIndex] = dragValue;
-                caleFisierePDF[dragItem.Index-1] = itemValue;
-
                 lvPDFs.Items.Remove(dragItem);
                 lvPDFs.Focus();
                 lvPDFs.Items[itemIndex].Selected = true;
                 
 
             }
-            button1.PerformClick();
         }
 
         private void btnMoveItemDown_Click(object sender, EventArgs e)
@@ -641,9 +646,9 @@ namespace PDFCombine
                 return;
             }
             //if (lvPDFs.SelectedItems[lvPDFs.SelectedItems.Count-1].Index+lvPDFs.SelectedItems.Count-1 == lvPDFs.Items.Count)
-            if(lvPDFs.Items[lvPDFs.SelectedItems[lvPDFs.SelectedItems.Count-1].Index].Index == lvPDFs.Items[lvPDFs.Items.Count-1].Index)
+            if (lvPDFs.Items[lvPDFs.SelectedItems[lvPDFs.SelectedItems.Count - 1].Index].Index == lvPDFs.Items[lvPDFs.Items.Count - 1].Index)
                 return;
-            ListViewItem dragToItem = lvPDFs.Items[lvPDFs.SelectedItems[lvPDFs.SelectedItems.Count-1].Index + 1];
+            ListViewItem dragToItem = lvPDFs.Items[lvPDFs.SelectedItems[lvPDFs.SelectedItems.Count - 1].Index + 1];
             if (dragToItem == null)
             {
                 return;
@@ -661,31 +666,20 @@ namespace PDFCombine
 
 
                 int itemIndex = dragIndex;
-                if (itemIndex == dragItem.Index)
-                {
-                    return;
-                }
-                if (dragItem.Index < itemIndex)
-                    itemIndex++;
-                else
-                    itemIndex = dragIndex + i;
+                itemIndex++;
 
-                //reorder dictionary
-                String currentValue = caleFisierePDF[currentItem];
-                String removeValue = caleFisierePDF[dragIndex-1];
-                caleFisierePDF[currentItem] = removeValue;
-                caleFisierePDF[dragIndex-1] = currentValue;
+
+
 
                 ListViewItem insertItem = (ListViewItem)dragItem.Clone();
+
                 lvPDFs.Items.Insert(itemIndex, insertItem);
 
 
                 lvPDFs.Items.Remove(dragItem);
                 lvPDFs.Focus();
-                lvPDFs.Items[itemIndex-1].Selected = true;
-                break;
+                lvPDFs.Items[itemIndex - 1].Selected = true;
             }
-            button1.PerformClick();
         }
         #endregion ORDER MOETHODS
 
@@ -699,14 +693,7 @@ namespace PDFCombine
         }
 
       
-        private void button1_Click(object sender, EventArgs e)
-        {
-            listBox1.Items.Clear();
-            foreach (int s in caleFisierePDF.Keys)
-            {
-                listBox1.Items.Add("value:" + caleFisierePDF[s] + "key:" + s.ToString());
-            }
-        }
+
 
  
 

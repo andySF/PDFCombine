@@ -14,10 +14,11 @@ namespace PDFCombine
     class FileUtils
     {
         
-        public Dictionary<int,string> caleFisierePDF { get; set; }
+        public List<String> caleFisierePDF { get; set; }
         public bool writeDetails { get; set; }
         public String caleOutput { get; set; }
 
+        int dpi = 100;
         
         public void CombinePDFs(object sender)
         {
@@ -35,13 +36,16 @@ namespace PDFCombine
                 PdfDocument fisierPDF;
                 int pgnr = 0;
 
-                foreach (String caleFisierPDF in caleFisierePDF.Values)
+                foreach (String caleFisierPDF in caleFisierePDF)
                 {
 
                     bool isPDF = false;
+                    bool isImage=false;
                     String extension = Path.GetExtension(caleFisierPDF);
                     if (extension.ToLower() == ".pdf")
                         isPDF = true;
+                    else if ((extension.ToLower() == ".jpg") || (extension.ToLower() == ".png"))
+                        isImage = true;
 
                     if (isPDF)
                     {
@@ -74,7 +78,7 @@ namespace PDFCombine
                         }
                     }
 
-                    if (!isPDF)
+                    if (isImage)
                     {
                         PdfPage page = outputDocument.AddPage();
                         gfx = XGraphics.FromPdfPage(page);
@@ -160,11 +164,12 @@ namespace PDFCombine
 
         private Bitmap RotateImage(Bitmap inputImg, double degreeAngle)
         {
+            inputImg.SetResolution(dpi, dpi);
             //Corners of the image
             PointF[] rotationPoints = { new PointF(0, 0),
                                         new PointF(inputImg.Width, 0),
                                         new PointF(0, inputImg.Height),
-                                        new PointF(inputImg.Width, inputImg.Height)};
+                                        new PointF(inputImg.Width, inputImg.Height) };
 
             //Rotate the corners
             PointMath.RotatePoints(rotationPoints, new PointF(inputImg.Width / 2.0f, inputImg.Height / 2.0f), degreeAngle);

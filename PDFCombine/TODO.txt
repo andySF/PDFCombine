@@ -6,3 +6,7 @@ remove invalid files
 cind importi mai multe fisiere si sunt fisiere invalide sa dea un alert ca nu s-au importat toate
 
 MISSING DLL's ERROR 
+
+drag and drop reenable
+
+cate fisiere sunt in lista?
