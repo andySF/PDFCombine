@@ -34,7 +34,7 @@
   <ItemGroup>
     <Reference Include="PdfSharp, Version=1.31.1789.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Desktop\PDFSharp-MigraDocFoundation-1_31\PDFsharp\code\PdfSharp\bin\Release\PdfSharp.dll</HintPath>
+      <HintPath>..\PdfSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

@@ -1,8 +1,6 @@
 C:\Users\andy\My Projects\PDFCombine\PDFCombine\bin\Debug\PDFCombine.exe
 C:\Users\andy\My Projects\PDFCombine\PDFCombine\bin\Debug\PDFCombine.pdb
 C:\Users\andy\My Projects\PDFCombine\PDFCombine\bin\Debug\PdfSharp.dll
-C:\Users\andy\My Projects\PDFCombine\PDFCombine\bin\Debug\PdfSharp.xml
-C:\Users\andy\My Projects\PDFCombine\PDFCombine\bin\Debug\de\PdfSharp.resources.dll
 C:\Users\andy\My Projects\PDFCombine\PDFCombine\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\andy\My Projects\PDFCombine\PDFCombine\obj\Debug\PDFCombine.frmMain.resources
 C:\Users\andy\My Projects\PDFCombine\PDFCombine\obj\Debug\PDFCombine.Properties.Resources.resources
