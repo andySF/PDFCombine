@@ -19,3 +19,5 @@ C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\De
 C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\Debug\PDFCombine.frmMain.resources
 C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\Debug\PDFCombine.Properties.Resources.resources
 C:\Users\andy\Documents\Visual Studio 2008\Projects\pdfcombine\PDFCombine\obj\Debug\PDFCombine.csproj.GenerateResource.Cache
+C:\Users\andy\My Projects\PDFCombine\PDFCombine\obj\Debug\PDFCombine.frmDetailsSettings.resources
+C:\Users\andy\My Projects\PDFCombine\PDFCombine\bin\Debug\PDFCombine.exe.config

@@ -17,6 +17,7 @@ namespace PDFCombine
         public List<String> caleFisierePDF { get; set; }
         public bool writeDetails { get; set; }
         public String caleOutput { get; set; }
+        
 
         int dpi = 100;
         
@@ -38,7 +39,7 @@ namespace PDFCombine
 
                 foreach (String caleFisierPDF in caleFisierePDF)
                 {
-
+                    
                     bool isPDF = false;
                     bool isImage=false;
                     String extension = Path.GetExtension(caleFisierPDF);
@@ -61,18 +62,24 @@ namespace PDFCombine
                             else
                             {
                                 pgnr++;
+
                                 //PdfPage page = fisierPDF.Pages[curPageNr];
                                 //curPageNr++;
                                 PdfPage page = _page;
                                 page = outputDocument.AddPage(page);
                                 if (writeDetails)
                                 {
+                                    //write details
                                     gfx = XGraphics.FromPdfPage(page);
                                     box = page.MediaBox.ToXRect();
                                     box.Inflate(0, -10);
-                                    gfx.DrawString(String.Format("{0} • {1}", caleFisierPDF, pgnr),
-                                      font, XBrushes.Red, box, format);
+
+                                    FileInfo f = new FileInfo(caleFisierPDF);
+                                    SolidBrush textBrush = new SolidBrush(PDFCombine.Properties.Settings.Default.TextColor);
+                                    gfx.DrawString(String.Format("{0} • {1}", f.Name, pgnr),
+                                      font, textBrush, box, format);
                                 }
+
                                 (sender as System.ComponentModel.BackgroundWorker).ReportProgress(pgnr);
                             }
                         }
@@ -80,6 +87,7 @@ namespace PDFCombine
 
                     if (isImage)
                     {
+                        pgnr++;
                         PdfPage page = outputDocument.AddPage();
                         gfx = XGraphics.FromPdfPage(page);
                         XImage xImage;
@@ -101,8 +109,18 @@ namespace PDFCombine
                         //if image is smaller than page or has been rotated and resized add it to page
                         xImage = XImage.FromGdiPlusImage(bitmap);
                         gfx.DrawImage(xImage, 0, 0,xImage.PixelWidth, xImage.PixelHeight);
+                        if (writeDetails)
+                        {
+                            //write details
+                            box = page.MediaBox.ToXRect();
+                            box.Inflate(0, -10);
+
+                            FileInfo f = new FileInfo(caleFisierPDF);
+                            SolidBrush textBrush = new SolidBrush(PDFCombine.Properties.Settings.Default.TextColor);
+                            gfx.DrawString(String.Format("{0} • {1}", f.Name, pgnr),
+                              font, textBrush, box, format);
+                        }
                         bitmap.Dispose();
-                        pgnr++;
                         (sender as System.ComponentModel.BackgroundWorker).ReportProgress(pgnr);
                     }
                 }

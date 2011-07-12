@@ -51,6 +51,8 @@
             this.btnCombinePDFs = new System.Windows.Forms.Button();
             this.btnSelectPDFs = new System.Windows.Forms.Button();
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.btnSettings = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openPdfDialog
@@ -69,6 +71,7 @@
             this.cbWriteDetails.TabIndex = 3;
             this.cbWriteDetails.Text = "Write Page Numbers";
             this.cbWriteDetails.UseVisualStyleBackColor = true;
+            this.cbWriteDetails.CheckedChanged += new System.EventHandler(this.cbWriteDetails_CheckedChanged);
             // 
             // cbOpenFile
             // 
@@ -266,11 +269,34 @@
             this.btnSelectPDFs.UseVisualStyleBackColor = true;
             this.btnSelectPDFs.Click += new System.EventHandler(this.btnSelectPDFs_Click);
             // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInfo.Location = new System.Drawing.Point(780, 472);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(45, 16);
+            this.lblInfo.TabIndex = 13;
+            this.lblInfo.Text = "label1";
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.Location = new System.Drawing.Point(171, 472);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(62, 23);
+            this.btnSettings.TabIndex = 14;
+            this.btnSettings.Text = "Settings";
+            this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Visible = false;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(966, 604);
+            this.Controls.Add(this.btnSettings);
+            this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.btnRemoveErrors);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.btnCancelOperation);
@@ -316,6 +342,8 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerCombine;
         private System.Windows.Forms.Button btnRemoveErrors;
         private System.Windows.Forms.ToolTip toolTipInfo;
+        private System.Windows.Forms.Label lblInfo;
+        private System.Windows.Forms.Button btnSettings;
     }
 }
 

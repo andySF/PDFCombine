@@ -24,6 +24,8 @@ namespace PDFCombine
         int totalOutputPages = 0;
         int noOfCurrentInvalidFiles = 0;
         int noOfTotalErrorFiles = 0;
+        int totalFilesInList = 0;
+        
 
         CanelOperationCallerEnum CanelOperationCaller;
 
@@ -64,6 +66,22 @@ namespace PDFCombine
 
                 lvPDFs.Items[lvPDFs.Items.Count - 1].EnsureVisible();
                
+            }
+        }
+
+        //delegate for accessing lvPDFs from backgroundworker
+        private delegate void SetInfoCallback(String info);
+        private void SetInfo(String info)
+        {
+            if (lvPDFs.InvokeRequired)
+            {
+                SetInfoCallback d = new SetInfoCallback(SetInfo);
+                this.Invoke(d, new object[] {info });
+            }
+            else
+            {
+                lblInfo.Text = info;
+
             }
         }
 
@@ -141,7 +159,6 @@ namespace PDFCombine
                                 item.Tag = imageFile;
                                 //lvPDFs.Refresh();
                                 //add a complete verified version of file to list
-                                item.Tag = supportedPDF;
 
                                 AddItem(item, path);
                         }
@@ -179,7 +196,6 @@ namespace PDFCombine
                                 item = new ListViewItem(col);
                                 item.Tag = unsupportedPDF;
                             }
-
                             AddItem(item, path);
                         }//isPDF
                         
@@ -187,6 +203,8 @@ namespace PDFCombine
                         //add a complete verified version of file to list
                     }//if isFile
                 }
+                totalFilesInList++;
+                SetInfo("TOTAL: " + totalFilesInList.ToString() + " files.");
 
                 backgroundWorkerAddItemsToList.ReportProgress((files++));
             }
@@ -206,7 +224,7 @@ namespace PDFCombine
                 foreach (ListViewItem itm in lvPDFs.Items)
                 {
                     String path = itm.SubItems[0].Text;
-                    if (itm.Tag.ToString() == supportedPDF)
+                    if ((itm.Tag.ToString() == supportedPDF)|itm.Tag.ToString()==imageFile)
                         if (File.Exists(path))
                             caleFisierePDF.Add(path);
                             
@@ -257,12 +275,14 @@ namespace PDFCombine
             }
 
             SetUiToApplicationStartDefault();
-            MessageBox.Show("GATA, Done, Fine", "ok ok ok", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-
-            if (cbOpenFile.Checked)
+            if (MessageBox.Show("GATA, Done, Fine", "ok ok ok", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
             {
-                //Process.Start(saveFile.FileName);
+
+                if (cbOpenFile.Checked)
+                {
+                    Process.Start(Files.caleOutput);
+                }
             }
 
         }
@@ -346,6 +366,9 @@ namespace PDFCombine
             lblProgress.Visible = true;
             lblProgress.Text = "Preparing...";
 
+            lblInfo.Visible = true;
+            lblInfo.Text = String.Empty;
+
             btnClear.Visible = false;
 
             btnRemoveFromList.Enabled = false;
@@ -367,6 +390,8 @@ namespace PDFCombine
         private void SetUiBasedOnItemsInList()
         {
 
+            lblInfo.Text = "TOTAL: " + totalFilesInList.ToString() + " files.";
+
             btnClear.Visible = true;
 
             lblProgress.Visible = false;
@@ -375,6 +400,14 @@ namespace PDFCombine
             btnSelectPDFs.Enabled = true;
             btnCancelOperation.Visible = false;
             lvPDFs.AllowDrop = true;
+
+            cbWriteDetails.Enabled = true;
+            cbOpenFile.Enabled = true;
+
+            if (cbWriteDetails.Checked)
+                btnSettings.Visible = true;
+            if (!cbWriteDetails.Checked)
+                btnSettings.Visible = false;
 
             if (noOfTotalErrorFiles != 0)
                 btnRemoveErrors.Visible = true;
@@ -393,8 +426,7 @@ namespace PDFCombine
                 btnMoveItemDown.Enabled = true;
                 btnMoveItemUp.Enabled = true;
 
-                cbWriteDetails.Enabled = true;
-                cbOpenFile.Enabled = true;
+
             }
             if (lvPDFs.Items.Count == 1)
             {
@@ -410,8 +442,7 @@ namespace PDFCombine
                     btnMoveItemDown.Enabled = false;
                     btnMoveItemUp.Enabled = false;
 
-                    cbWriteDetails.Enabled = true;
-                    cbOpenFile.Enabled = true;
+
                 }
                 else
                 {
@@ -430,11 +461,13 @@ namespace PDFCombine
 
         private void SetUiToApplicationStartDefault()
         {
+
             lvPDFs.Items.Clear();
             caleFisierePDF.Clear();
             Files.AproximativeOutputSize = 0;
             totalOutputPages = 0;
             noOfTotalErrorFiles = 0;
+            totalFilesInList = 0;
 
             btnSelectPDFs.Visible = true;
             btnSelectPDFs.Enabled = true;
@@ -449,6 +482,9 @@ namespace PDFCombine
             lblProgress.Visible = false;
             lblProgress.Text = String.Empty;
 
+            lblInfo.Visible = false;
+            lblInfo.Text = String.Empty;
+
             btnMoveItemDown.Enabled = false;
             btnMoveItemUp.Enabled = false;
             btnRemoveFromList.Enabled = false;
@@ -456,6 +492,8 @@ namespace PDFCombine
             btnRemoveErrors.Visible = false;
 
             cbWriteDetails.Enabled = false;
+            btnSettings.Visible = false;
+
             cbOpenFile.Enabled = false;
 
             CanelOperationCaller = CanelOperationCallerEnum.Nobody;
@@ -575,7 +613,9 @@ namespace PDFCombine
             foreach (ListViewItem item in lvPDFs.SelectedItems)
             {
                 lvPDFs.Items.Remove(item);
+                
             }
+            totalFilesInList = lvPDFs.Items.Count;
             SetUiBasedOnItemsInList();
         }
 
@@ -680,11 +720,30 @@ namespace PDFCombine
             foreach (ListViewItem itm in lvPDFs.Items)
             {
                 if (itm.Tag.ToString() == unsupportedPDF)
+                {
                     itm.Remove();
+                }
+                totalFilesInList = lvPDFs.Items.Count;
+                
             }
             noOfCurrentInvalidFiles = 0;
             noOfTotalErrorFiles = 0;
             SetUiBasedOnItemsInList();
+        }
+
+        private void cbWriteDetails_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbWriteDetails.Checked)
+                btnSettings.Visible=true;
+            if (!cbWriteDetails.Checked)
+                btnSettings.Visible = false;
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            frmDetailsSettings fds = new frmDetailsSettings();
+            fds.ShowDialog();
+
         }
 
       
