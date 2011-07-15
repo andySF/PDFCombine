@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <EmbeddedResource Include="info.rtf" />
     <None Include="Resources\error_delete.png" />
     <None Include="Resources\page_white_wrench.png" />
     <None Include="Resources\page_white_add.png" />
