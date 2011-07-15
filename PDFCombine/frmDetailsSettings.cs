@@ -17,7 +17,41 @@ namespace PDFCombine
 
             GetInstalledFonts();
 
-            colorPicker.BackColor = PDFCombine.Properties.Settings.Default.TextColor;
+            colorPicker.BackColor = PDFCombine.Properties.Settings.Default.Details_TextColor;
+            cbDetailsFont.Text = PDFCombine.Properties.Settings.Default.Details_Font;
+            cbWriteFileName.Checked = PDFCombine.Properties.Settings.Default.Details_WriteFileName;
+            cbWritePageNumbers.Checked = PDFCombine.Properties.Settings.Default.Details_WritePageNumber;
+            numericUpDownDetailsSize.Value = PDFCombine.Properties.Settings.Default.Details_Size;
+
+            cbWatermarkEnable.Checked = PDFCombine.Properties.Settings.Default.Watermark_Enabled;
+            WatermarkUI(cbWatermarkEnable.Checked);
+            txtWatermark.Text = PDFCombine.Properties.Settings.Default.Watermark_Text;
+            cbWatermarkFont.Text = PDFCombine.Properties.Settings.Default.Watermark_Font;
+            numericUpDownWatermarkSize.Value = PDFCombine.Properties.Settings.Default.Watermark_size;
+            cbWatermarkLocation.Text = PDFCombine.Properties.Settings.Default.Watermark_Location;
+            WatermarkUI(cbWatermarkEnable.Checked);
+        }
+
+        private void WatermarkUI(bool enabled)
+        {
+            if (enabled)
+            {
+                txtWatermark.Enabled = true;
+                cbWatermarkFont.Enabled = true;
+                cbWatermarkFont.Enabled = true;
+                numericUpDownWatermarkSize.Enabled = true;
+                cbWatermarkLocation.Enabled = true;
+                panelWatermarkPreview.Enabled = true;
+            }
+            if (!enabled)
+            {
+                txtWatermark.Enabled = false;
+                cbWatermarkFont.Enabled = false;
+                cbWatermarkFont.Enabled = false;
+                numericUpDownWatermarkSize.Enabled = false;
+                cbWatermarkLocation.Enabled = false;
+                panelWatermarkPreview.Enabled = false;
+            }
         }
 
         private void colorPicker_Click(object sender, EventArgs e)
@@ -29,7 +63,18 @@ namespace PDFCombine
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            PDFCombine.Properties.Settings.Default.TextColor = colorPicker.BackColor;
+            PDFCombine.Properties.Settings.Default.Details_TextColor = colorPicker.BackColor;
+            PDFCombine.Properties.Settings.Default.Details_Font = cbDetailsFont.Text;
+            PDFCombine.Properties.Settings.Default.Details_WriteFileName = cbWriteFileName.Checked;
+            PDFCombine.Properties.Settings.Default.Details_WritePageNumber = cbWritePageNumbers.Checked;
+            PDFCombine.Properties.Settings.Default.Details_Size = numericUpDownDetailsSize.Value;
+
+            PDFCombine.Properties.Settings.Default.Watermark_Enabled = cbWatermarkEnable.Checked;
+            PDFCombine.Properties.Settings.Default.Watermark_Text = txtWatermark.Text;
+            PDFCombine.Properties.Settings.Default.Watermark_Font = cbWatermarkFont.Text;
+            PDFCombine.Properties.Settings.Default.Watermark_size = numericUpDownWatermarkSize.Value;
+            PDFCombine.Properties.Settings.Default.Watermark_Location = cbWatermarkLocation.Text;
+
             PDFCombine.Properties.Settings.Default.Save();
         }
 
@@ -75,6 +120,42 @@ namespace PDFCombine
             lblFontDetailsFontPreview.Text = cbDetailsFont.Text;
 
         }
+
+        private void cbWatermarkEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            WatermarkUI(cbWatermarkEnable.Checked);
+        }
+
+        private void cbWatermarkFont_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PreviewWatermarkChanges();
+        }
+
+        private void numericUpDownWatermarkSize_ValueChanged(object sender, EventArgs e)
+        {
+            PreviewWatermarkChanges();
+        }
+
+        private void txtWatermark_TextChanged(object sender, EventArgs e)
+        {
+            PreviewWatermarkChanges();
+        }
+
+        private void PreviewWatermarkChanges()
+        {
+            if (IsStyleSupported(cbWatermarkFont.Text, FontStyle.Regular))
+            {
+                lblWatermarkFontPreview.Font = new Font(cbWatermarkFont.Text, 12, FontStyle.Regular);
+            }
+            else if (IsStyleSupported(cbWatermarkFont.Text, FontStyle.Bold))
+            {
+                lblWatermarkFontPreview.Font = new Font(cbWatermarkFont.Text, 12, FontStyle.Bold);
+            }
+
+            lblWatermarkFontPreview.Text = txtWatermark.Text;
+        }
+
+     
 
     }
 }

@@ -26,12 +26,120 @@ namespace PDFCombine.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Green")]
-        public global::System.Drawing.Color TextColor {
+        public global::System.Drawing.Color Details_TextColor {
             get {
-                return ((global::System.Drawing.Color)(this["TextColor"]));
+                return ((global::System.Drawing.Color)(this["Details_TextColor"]));
             }
             set {
-                this["TextColor"] = value;
+                this["Details_TextColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("verdana")]
+        public string Details_Font {
+            get {
+                return ((string)(this["Details_Font"]));
+            }
+            set {
+                this["Details_Font"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Watermark_Text {
+            get {
+                return ((string)(this["Watermark_Text"]));
+            }
+            set {
+                this["Watermark_Text"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("verdana")]
+        public string Watermark_Font {
+            get {
+                return ((string)(this["Watermark_Font"]));
+            }
+            set {
+                this["Watermark_Font"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public decimal Watermark_size {
+            get {
+                return ((decimal)(this["Watermark_size"]));
+            }
+            set {
+                this["Watermark_size"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Watermark_Enabled {
+            get {
+                return ((bool)(this["Watermark_Enabled"]));
+            }
+            set {
+                this["Watermark_Enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Details_WritePageNumber {
+            get {
+                return ((bool)(this["Details_WritePageNumber"]));
+            }
+            set {
+                this["Details_WritePageNumber"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Details_WriteFileName {
+            get {
+                return ((bool)(this["Details_WriteFileName"]));
+            }
+            set {
+                this["Details_WriteFileName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("CENTER")]
+        public string Watermark_Location {
+            get {
+                return ((string)(this["Watermark_Location"]));
+            }
+            set {
+                this["Watermark_Location"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public decimal Details_Size {
+            get {
+                return ((decimal)(this["Details_Size"]));
+            }
+            set {
+                this["Details_Size"] = value;
             }
         }
     }

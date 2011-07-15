@@ -42,6 +42,9 @@
             this.backgroundWorkerAddItemsToList = new System.ComponentModel.BackgroundWorker();
             this.lblProgress = new System.Windows.Forms.Label();
             this.backgroundWorkerCombine = new System.ComponentModel.BackgroundWorker();
+            this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.btnSettings = new System.Windows.Forms.Button();
             this.btnRemoveErrors = new System.Windows.Forms.Button();
             this.btnCancelOperation = new System.Windows.Forms.Button();
             this.btnMoveItemUp = new System.Windows.Forms.Button();
@@ -50,9 +53,6 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.btnCombinePDFs = new System.Windows.Forms.Button();
             this.btnSelectPDFs = new System.Windows.Forms.Button();
-            this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
-            this.lblInfo = new System.Windows.Forms.Label();
-            this.btnSettings = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openPdfDialog
@@ -67,9 +67,9 @@
             this.cbWriteDetails.AutoSize = true;
             this.cbWriteDetails.Location = new System.Drawing.Point(41, 475);
             this.cbWriteDetails.Name = "cbWriteDetails";
-            this.cbWriteDetails.Size = new System.Drawing.Size(124, 17);
+            this.cbWriteDetails.Size = new System.Drawing.Size(114, 17);
             this.cbWriteDetails.TabIndex = 3;
-            this.cbWriteDetails.Text = "Write Page Numbers";
+            this.cbWriteDetails.Text = "Write Page Details";
             this.cbWriteDetails.UseVisualStyleBackColor = true;
             this.cbWriteDetails.CheckedChanged += new System.EventHandler(this.cbWriteDetails_CheckedChanged);
             // 
@@ -109,6 +109,7 @@
             this.lvPDFs.LargeImageList = this.imageListPdf;
             this.lvPDFs.Location = new System.Drawing.Point(41, 63);
             this.lvPDFs.Name = "lvPDFs";
+            this.lvPDFs.ShowItemToolTips = true;
             this.lvPDFs.Size = new System.Drawing.Size(913, 406);
             this.lvPDFs.SmallImageList = this.imageListPdf;
             this.lvPDFs.TabIndex = 5;
@@ -168,6 +169,30 @@
             this.backgroundWorkerCombine.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerCombine_DoWork);
             this.backgroundWorkerCombine.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerCombine_RunWorkerCompleted);
             this.backgroundWorkerCombine.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerCombine_ProgressChanged);
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInfo.Location = new System.Drawing.Point(780, 472);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(45, 16);
+            this.lblInfo.TabIndex = 13;
+            this.lblInfo.Text = "label1";
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.Image = global::PDFCombine.Properties.Resources.page_white_wrench;
+            this.btnSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSettings.Location = new System.Drawing.Point(161, 472);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(76, 24);
+            this.btnSettings.TabIndex = 14;
+            this.btnSettings.Text = "Settings";
+            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Visible = false;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // btnRemoveErrors
             // 
@@ -258,37 +283,18 @@
             // 
             // btnSelectPDFs
             // 
-            this.btnSelectPDFs.Image = global::PDFCombine.Properties.Resources.file_pdf;
+            this.btnSelectPDFs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSelectPDFs.Image = global::PDFCombine.Properties.Resources.page_white_add;
             this.btnSelectPDFs.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSelectPDFs.Location = new System.Drawing.Point(41, 16);
             this.btnSelectPDFs.Name = "btnSelectPDFs";
-            this.btnSelectPDFs.Size = new System.Drawing.Size(192, 31);
+            this.btnSelectPDFs.Size = new System.Drawing.Size(244, 31);
             this.btnSelectPDFs.TabIndex = 0;
-            this.btnSelectPDFs.Text = "Select Files";
+            this.btnSelectPDFs.Text = "Select any pdf or image to continue";
+            this.btnSelectPDFs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolTipInfo.SetToolTip(this.btnSelectPDFs, "Select the files you want to combine");
             this.btnSelectPDFs.UseVisualStyleBackColor = true;
             this.btnSelectPDFs.Click += new System.EventHandler(this.btnSelectPDFs_Click);
-            // 
-            // lblInfo
-            // 
-            this.lblInfo.AutoSize = true;
-            this.lblInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInfo.Location = new System.Drawing.Point(780, 472);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(45, 16);
-            this.lblInfo.TabIndex = 13;
-            this.lblInfo.Text = "label1";
-            // 
-            // btnSettings
-            // 
-            this.btnSettings.Location = new System.Drawing.Point(171, 472);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(62, 23);
-            this.btnSettings.TabIndex = 14;
-            this.btnSettings.Text = "Settings";
-            this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Visible = false;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // frmMain
             // 
@@ -312,7 +318,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(780, 500);
             this.Name = "frmMain";
-            this.Text = "PDF Combine";
+            this.Text = "PDFCombine - http://www.olteteanu.com";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

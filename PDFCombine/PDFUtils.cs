@@ -21,20 +21,27 @@ namespace PDFCombine
 
         int dpi = 100;
         
+
         public void CombinePDFs(object sender)
         {
+            PdfDocument outputDocument = new PdfDocument();
+            XGraphics gfx;
+            XRect box;
+            XRect boxShadow;
+            PdfDocument fisierPDF;
             try
             {
-                PdfDocument outputDocument = new PdfDocument();
-                XFont font = new XFont("Verdana", 10, XFontStyle.Bold);
+                var details_font=PDFCombine.Properties.Settings.Default.Details_Font;
+                var details_size = (float)PDFCombine.Properties.Settings.Default.Details_Size;
+                var write_watermark = PDFCombine.Properties.Settings.Default.Watermark_Enabled;
+
+                XFont font = new XFont(details_font, details_size, XFontStyle.Bold);
+
                 XStringFormat format = new XStringFormat();
                 format.Alignment = XStringAlignment.Center;
                 format.LineAlignment = XLineAlignment.Far;
                 
 
-                XGraphics gfx;
-                XRect box;
-                PdfDocument fisierPDF;
                 int pgnr = 0;
 
                 foreach (String caleFisierPDF in caleFisierePDF)
@@ -48,6 +55,24 @@ namespace PDFCombine
                     else if ((extension.ToLower() == ".jpg") || (extension.ToLower() == ".png"))
                         isImage = true;
 
+
+
+                    FileInfo f = new FileInfo(caleFisierPDF);
+                    SolidBrush textBrush = new SolidBrush(PDFCombine.Properties.Settings.Default.Details_TextColor);
+                    SolidBrush textBrush2 = new SolidBrush(Color.White);
+                    SolidBrush watermarkBrush = new SolidBrush(Color.FromArgb(100, 0, 0, 0));
+                    SolidBrush watermarkBrushShadow = new SolidBrush(Color.FromArgb(100, 255, 255, 255));
+
+                    var details_writePageNr = PDFCombine.Properties.Settings.Default.Details_WritePageNumber;
+                    var details_writeFileName = PDFCombine.Properties.Settings.Default.Details_WriteFileName;
+                    var fName = String.Empty;
+                    var _pgnr = String.Empty;
+                    if (details_writeFileName)
+                        fName = f.Name;
+                    if (details_writePageNr)
+                        _pgnr = pgnr.ToString();
+
+
                     if (isPDF)
                     {
                         fisierPDF = PdfReader.Open(caleFisierPDF, PdfDocumentOpenMode.Import);
@@ -57,6 +82,8 @@ namespace PDFCombine
                         {
                             if ((sender as System.ComponentModel.BackgroundWorker).CancellationPending == true)
                             {
+                                outputDocument.Close();
+                                outputDocument.Dispose();
                                 return;
                             }
                             else
@@ -69,29 +96,65 @@ namespace PDFCombine
                                 page = outputDocument.AddPage(page);
                                 if (writeDetails)
                                 {
-                                    //write details
+                                          //write details
                                     gfx = XGraphics.FromPdfPage(page);
                                     box = page.MediaBox.ToXRect();
                                     box.Inflate(0, -10);
-
-                                    FileInfo f = new FileInfo(caleFisierPDF);
-                                    SolidBrush textBrush = new SolidBrush(PDFCombine.Properties.Settings.Default.TextColor);
-                                    gfx.DrawString(String.Format("{0} • {1}", f.Name, pgnr),
+                                    boxShadow = box;
+                                    boxShadow.X = boxShadow.X + 1f; boxShadow.Y = boxShadow.Y + 1f;
+                                    
+                                    gfx.DrawString(String.Format("{0} • {1}", fName, _pgnr),
+                                     font, textBrush2, boxShadow, format);
+                                    gfx.DrawString(String.Format("{0} • {1}", fName, _pgnr),
                                       font, textBrush, box, format);
-                                }
+                                    if (write_watermark)
+                                    {
+                                        var watermark_text = PDFCombine.Properties.Settings.Default.Watermark_Text;
+                                        var watermark_font = PDFCombine.Properties.Settings.Default.Watermark_Font;
+                                        var watermark_size = (float)PDFCombine.Properties.Settings.Default.Watermark_size;
+                                        var watermark_location = PDFCombine.Properties.Settings.Default.Watermark_Location;
 
+                                        XFont fontWatermark = new XFont(watermark_font, watermark_size, XFontStyle.Bold);
+                                       
+                                        Point p = new Point();
+                                        if (watermark_location == "CENTER")
+                                        { p.X = (int)page.Width / 2; p.Y = (int)page.Height / 2; }
+                                        if (watermark_location == "TOP")
+                                        { p.X = (int)page.Width / 2; p.Y = (int)watermark_size + 20; }
+                                        if (watermark_location == "BOTTOM")
+                                        { p.X = (int)page.Width / 2; p.Y = (int)page.Height - 20; }
+
+                                        gfx.DrawString(watermark_text, fontWatermark, watermarkBrushShadow, p.X+2,p.Y+2, format);
+                                        gfx.DrawString(watermark_text, fontWatermark, watermarkBrush, p, format);
+                                        //gfx.DrawString
+                                    }
+                                    gfx.Dispose();
+                                }
+                                
                                 (sender as System.ComponentModel.BackgroundWorker).ReportProgress(pgnr);
                             }
                         }
+                        //fisierPDF.Close();
+                        //fisierPDF.Dispose();
+
                     }
 
                     if (isImage)
                     {
-                        pgnr++;
                         PdfPage page = outputDocument.AddPage();
                         gfx = XGraphics.FromPdfPage(page);
                         XImage xImage;
                         Bitmap bitmap = new Bitmap(caleFisierPDF);
+                        if ((sender as System.ComponentModel.BackgroundWorker).CancellationPending == true)
+                        {
+                            bitmap.Dispose();
+                            outputDocument.Close();
+                            outputDocument.Dispose();
+                            GC.Collect();
+                            return;
+                        }
+                        pgnr++;
+
 
                         //if image is landscape and bigger than page make it portrait
                         if ((bitmap.Width > bitmap.Height)&& ( bitmap.Width > gfx.PageSize.Width))
@@ -114,24 +177,60 @@ namespace PDFCombine
                             //write details
                             box = page.MediaBox.ToXRect();
                             box.Inflate(0, -10);
+                            boxShadow = box;
+                            boxShadow.X = boxShadow.X + 1f; boxShadow.Y = boxShadow.Y + 1f;
 
-                            FileInfo f = new FileInfo(caleFisierPDF);
-                            SolidBrush textBrush = new SolidBrush(PDFCombine.Properties.Settings.Default.TextColor);
-                            gfx.DrawString(String.Format("{0} • {1}", f.Name, pgnr),
+                            
+                            gfx.DrawString(String.Format("{0} • {1}", fName, _pgnr),
+                              font, textBrush2, boxShadow, format);
+                            gfx.DrawString(String.Format("{0} • {1}", fName, _pgnr),
                               font, textBrush, box, format);
+
+                            if (write_watermark)
+                            {
+                                var watermark_text = PDFCombine.Properties.Settings.Default.Watermark_Text;
+                                var watermark_font = PDFCombine.Properties.Settings.Default.Watermark_Font;
+                                var watermark_size = (float)PDFCombine.Properties.Settings.Default.Watermark_size;
+                                var watermark_location = PDFCombine.Properties.Settings.Default.Watermark_Location;
+
+                                XFont fontWatermark = new XFont(watermark_font, watermark_size, XFontStyle.Bold);
+                                Point p = new Point();
+                                if (watermark_location == "CENTER")
+                                { p.X = (int)page.Width / 2; p.Y = (int)page.Height / 2; }
+                                if (watermark_location == "TOP")
+                                { p.X = (int)page.Width / 2; p.Y =(int)watermark_size+20;}
+                                if (watermark_location == "BOTTOM")
+                                { p.X = (int)page.Width / 2; p.Y = (int)page.Height - 20; }
+
+                                gfx.DrawString(watermark_text, fontWatermark, watermarkBrush, p, format);
+                                //gfx.DrawString
+                            }
                         }
+                        gfx.Dispose();
+                        xImage.Dispose();
                         bitmap.Dispose();
                         (sender as System.ComponentModel.BackgroundWorker).ReportProgress(pgnr);
                     }
                 }
                 outputDocument.Save(caleOutput);
                 outputDocument.Close();
+                outputDocument.Dispose();
+                
+                
             }
 
             catch (Exception ex)
             {
+                outputDocument.Close();
+                outputDocument.Dispose();
                 throw new Exception(ex.Message);
             }
+        }
+
+        //
+        private void WriteDetails()
+        {
+
         }
 
         public int PdfPageCount { get; set; }
@@ -140,16 +239,18 @@ namespace PDFCombine
 
         public void ReadThisPDF(String caleFisierPDF)
         {
+            PdfDocument fisierPDF = new PdfDocument();
             try
             {
                 PdfInfo = "Ready";
-                PdfDocument fisierPDF = new PdfDocument();
                 fisierPDF = PdfReader.Open(caleFisierPDF, PdfDocumentOpenMode.Import);
                 PdfPageCount = fisierPDF.PageCount;
+                fisierPDF.Dispose();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                PdfPageCount= 0;
+                fisierPDF.Dispose();
+                PdfPageCount = 0;
                 PdfInfo = ex.Message;
 
             }

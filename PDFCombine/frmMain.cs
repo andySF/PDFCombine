@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace PDFCombine
 {
@@ -25,7 +26,7 @@ namespace PDFCombine
         int noOfCurrentInvalidFiles = 0;
         int noOfTotalErrorFiles = 0;
         int totalFilesInList = 0;
-        
+        Thread checkUpdateThread;
 
         CanelOperationCallerEnum CanelOperationCaller;
 
@@ -33,11 +34,24 @@ namespace PDFCombine
         {
             InitializeComponent();
             SetUiToApplicationStartDefault();
+
+            checkUpdateThread = new System.Threading.Thread(CheckForUpdate);
+            checkUpdateThread.SetApartmentState(System.Threading.ApartmentState.STA);
+            checkUpdateThread.Start();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void CheckForUpdate()
+        {
+            if (CheckUpdate.IsUpdateAvailable())
+            {
+                if(MessageBox.Show("A new version of PDFCombine is available.\nDo you want to download the last version?", "A New Version is available", MessageBoxButtons.YesNo, MessageBoxIcon.Information)==DialogResult.Yes)
+                    Process.Start(CheckUpdate.GetUrlForDownload());
+            }
         }
 
         #region IMPORT FILES 
@@ -159,7 +173,7 @@ namespace PDFCombine
                                 item.Tag = imageFile;
                                 //lvPDFs.Refresh();
                                 //add a complete verified version of file to list
-
+                                item.ToolTipText = "Double Click to open " + Path.GetFileName(path) + " in your default image viewer!";
                                 AddItem(item, path);
                         }
                         if (isPDF)
@@ -196,6 +210,7 @@ namespace PDFCombine
                                 item = new ListViewItem(col);
                                 item.Tag = unsupportedPDF;
                             }
+                            item.ToolTipText = "Double Click to open " + Path.GetFileName(path) + " in your default pdf reader!";
                             AddItem(item, path);
                         }//isPDF
                         
@@ -258,6 +273,7 @@ namespace PDFCombine
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error ocured", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Cancel = true;
             }
         }
 
@@ -268,23 +284,28 @@ namespace PDFCombine
 
         private void backgroundWorkerCombine_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Cancelled == true)
+            if (e.Cancelled)
             {
                 btnCancelOperation.Enabled = true;
-                MessageBox.Show("Operation has been canceled","CANCELED",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                MessageBox.Show("Operation has been canceled", "CANCELED", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+                SetUiToApplicationStartDefault();
 
-            SetUiToApplicationStartDefault();
-
-            if (MessageBox.Show("GATA, Done, Fine", "ok ok ok", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
+            if(!e.Cancelled)
             {
+                var textForOpenningFile = String.Empty;
+                if(cbOpenFile.Checked)
+                    textForOpenningFile = "\n\nAfter your press ok the file will be opened with your default application";
 
-                if (cbOpenFile.Checked)
+                if (MessageBox.Show("Your file has been saved to:\n\n"+Files.caleOutput+textForOpenningFile, "DONE", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
                 {
-                    Process.Start(Files.caleOutput);
+
+                    if (cbOpenFile.Checked)
+                    {
+                        Process.Start(Files.caleOutput);
+                    }
                 }
             }
-
         }
 
         #endregion
@@ -357,6 +378,7 @@ namespace PDFCombine
 
         private void SetUiForOperationInProgress(CanelOperationCallerEnum _CanelOperationCaller)
         {
+            btnSettings.Visible = false;
             btnSelectPDFs.Enabled = false;
             btnCombinePDFs.Visible = false;
 
@@ -463,6 +485,7 @@ namespace PDFCombine
         {
 
             lvPDFs.Items.Clear();
+            lvPDFs.AllowDrop = true;
             caleFisierePDF.Clear();
             Files.AproximativeOutputSize = 0;
             totalOutputPages = 0;
@@ -495,6 +518,7 @@ namespace PDFCombine
             btnSettings.Visible = false;
 
             cbOpenFile.Enabled = false;
+
 
             CanelOperationCaller = CanelOperationCallerEnum.Nobody;
         }

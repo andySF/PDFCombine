@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckUpdate.cs" />
     <Compile Include="frmDetailsSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +94,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Resources\error_delete.png" />
+    <None Include="Resources\page_white_wrench.png" />
+    <None Include="Resources\page_white_add.png" />
     <Content Include="UI LOGIC.txt" />
     <Content Include="File-Pdf.ico" />
     <Content Include="TODO.txt" />

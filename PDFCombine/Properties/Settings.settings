@@ -2,8 +2,35 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PDFCombine.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="TextColor" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="Details_TextColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Green</Value>
+    </Setting>
+    <Setting Name="Details_Font" Type="System.String" Scope="User">
+      <Value Profile="(Default)">verdana</Value>
+    </Setting>
+    <Setting Name="Watermark_Text" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Watermark_Font" Type="System.String" Scope="User">
+      <Value Profile="(Default)">verdana</Value>
+    </Setting>
+    <Setting Name="Watermark_size" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="Watermark_Enabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Details_WritePageNumber" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Details_WriteFileName" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Watermark_Location" Type="System.String" Scope="User">
+      <Value Profile="(Default)">CENTER</Value>
+    </Setting>
+    <Setting Name="Details_Size" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">10</Value>
     </Setting>
   </Settings>
 </SettingsFile>
