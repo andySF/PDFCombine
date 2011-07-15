@@ -770,6 +770,12 @@ namespace PDFCombine
 
         }
 
+        private void btnInfo_Click(object sender, EventArgs e)
+        {
+            frmInfo fi = new frmInfo();
+            fi.ShowDialog();
+        }
+
       
 
 

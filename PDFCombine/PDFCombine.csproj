@@ -51,6 +51,12 @@
     <Compile Include="frmDetailsSettings.Designer.cs">
       <DependentUpon>frmDetailsSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInfo.Designer.cs">
+      <DependentUpon>frmInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,6 +68,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmDetailsSettings.resx">
       <DependentUpon>frmDetailsSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInfo.resx">
+      <DependentUpon>frmInfo.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
@@ -96,6 +106,7 @@
     <None Include="Resources\error_delete.png" />
     <None Include="Resources\page_white_wrench.png" />
     <None Include="Resources\page_white_add.png" />
+    <None Include="Resources\information.png" />
     <Content Include="UI LOGIC.txt" />
     <Content Include="File-Pdf.ico" />
     <Content Include="TODO.txt" />

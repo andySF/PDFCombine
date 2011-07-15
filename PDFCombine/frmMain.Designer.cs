@@ -44,6 +44,7 @@
             this.backgroundWorkerCombine = new System.ComponentModel.BackgroundWorker();
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
             this.lblInfo = new System.Windows.Forms.Label();
+            this.btnInfo = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnRemoveErrors = new System.Windows.Forms.Button();
             this.btnCancelOperation = new System.Windows.Forms.Button();
@@ -180,6 +181,17 @@
             this.lblInfo.TabIndex = 13;
             this.lblInfo.Text = "label1";
             // 
+            // btnInfo
+            // 
+            this.btnInfo.Image = global::PDFCombine.Properties.Resources.information;
+            this.btnInfo.Location = new System.Drawing.Point(12, 16);
+            this.btnInfo.Name = "btnInfo";
+            this.btnInfo.Size = new System.Drawing.Size(23, 31);
+            this.btnInfo.TabIndex = 15;
+            this.toolTipInfo.SetToolTip(this.btnInfo, "Remove selected files");
+            this.btnInfo.UseVisualStyleBackColor = true;
+            this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
+            // 
             // btnSettings
             // 
             this.btnSettings.Image = global::PDFCombine.Properties.Resources.page_white_wrench;
@@ -301,6 +313,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(966, 604);
+            this.Controls.Add(this.btnInfo);
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.btnRemoveErrors);
@@ -350,6 +363,7 @@
         private System.Windows.Forms.ToolTip toolTipInfo;
         private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.Button btnSettings;
+        private System.Windows.Forms.Button btnInfo;
     }
 }
 
