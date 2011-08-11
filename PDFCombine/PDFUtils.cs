@@ -52,7 +52,7 @@ namespace PDFCombine
                     String extension = Path.GetExtension(caleFisierPDF);
                     if (extension.ToLower() == ".pdf")
                         isPDF = true;
-                    else if ((extension.ToLower() == ".jpg") || (extension.ToLower() == ".png"))
+                    else if ((extension.ToLower() == ".jpg") || (extension.ToLower() == ".png") || (extension.ToLower() == ".tif") || (extension.ToLower() == ".tiff"))
                         isImage = true;
 
 

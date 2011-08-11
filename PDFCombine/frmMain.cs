@@ -148,7 +148,7 @@ namespace PDFCombine
                     String extension = Path.GetExtension(path);
                     if (extension.ToLower() == ".pdf")
                         isPDF = true;
-                    if ((extension.ToLower() == ".jpg")||extension.ToLower()==".png")
+                    if ((extension.ToLower() == ".jpg") || extension.ToLower() == ".png" || extension.ToLower() == ".tif" || extension.ToLower() == ".tiff")
                         isImage = true;
                     if (isFile)
                     {
