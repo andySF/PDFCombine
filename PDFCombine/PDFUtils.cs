@@ -42,7 +42,7 @@ namespace PDFCombine
                 format.LineAlignment = XLineAlignment.Far;
                 
 
-                int pgnr = 0;
+                int pgnr = 1;
 
                 foreach (String caleFisierPDF in caleFisierePDF)
                 {
@@ -88,8 +88,8 @@ namespace PDFCombine
                             }
                             else
                             {
-                                pgnr++;
-
+                                _pgnr = pgnr++.ToString();
+                                
                                 //PdfPage page = fisierPDF.Pages[curPageNr];
                                 //curPageNr++;
                                 PdfPage page = _page;
