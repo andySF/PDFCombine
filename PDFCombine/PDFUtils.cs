@@ -34,15 +34,56 @@ namespace PDFCombine
                 var details_font=PDFCombine.Properties.Settings.Default.Details_Font;
                 var details_size = (float)PDFCombine.Properties.Settings.Default.Details_Size;
                 var write_watermark = PDFCombine.Properties.Settings.Default.Watermark_Enabled;
+                
+                var documentTitle=PDFCombine.Properties.Settings.Default.documentTitle;
+                var documentAuthor=PDFCombine.Properties.Settings.Default.documentAuthor;
+                var documentSubject=PDFCombine.Properties.Settings.Default.documentSubject;
+                var documentKeywords=PDFCombine.Properties.Settings.Default.documentKeywords;
+
+                var ownerPassword=PDFCombine.Properties.Settings.Default.ownerPassword;
+                var userPassword=PDFCombine.Properties.Settings.Default.userPassword;
+
+                var permitAccessibilityExtractContent=PDFCombine.Properties.Settings.Default.permitAccessibilityExtractContent;
+                var permitAnnotations=PDFCombine.Properties.Settings.Default.permitAnnotations;
+                var permitAssembleDocument=PDFCombine.Properties.Settings.Default.permitAssembleDocument;
+                var permitExtractContent=PDFCombine.Properties.Settings.Default.permitExtractContent;
+                var permitFullQualityPrint=PDFCombine.Properties.Settings.Default.permitFullQualityPrint;
+                var permitModifyDocument=PDFCombine.Properties.Settings.Default.permitModifyDocument;
+                var permitPrint=PDFCombine.Properties.Settings.Default.permitPrint;
+                var permitFormsFill=PDFCombine.Properties.Settings.Default.PermitFormsFill;
 
                 XFont font = new XFont(details_font, details_size, XFontStyle.Bold);
 
                 XStringFormat format = new XStringFormat();
                 format.Alignment = XStringAlignment.Center;
                 format.LineAlignment = XLineAlignment.Far;
+               
+                //copyrighted fields
+                outputDocument.Info.Creator = "PDFCombine " +System.Reflection.Assembly.GetExecutingAssembly().GetName().Version+ " (www.olteteanu.com)";
+                //user fields
+                outputDocument.Info.Title = documentTitle;
+                outputDocument.Info.Author = documentAuthor;
+                outputDocument.Info.Subject = documentSubject;
+                outputDocument.Info.Keywords = documentKeywords;
                 
-
-                int pgnr = 1;
+                
+                //security options
+                if(ownerPassword!=String.Empty)
+                    outputDocument.SecuritySettings.OwnerPassword = ownerPassword;
+                if(userPassword!=String.Empty)
+                    outputDocument.SecuritySettings.UserPassword = userPassword;
+                if (ownerPassword != String.Empty)
+                {
+                    outputDocument.SecuritySettings.PermitAccessibilityExtractContent = permitAccessibilityExtractContent;
+                    outputDocument.SecuritySettings.PermitAnnotations = permitAnnotations;
+                    outputDocument.SecuritySettings.PermitAssembleDocument = permitAssembleDocument;
+                    outputDocument.SecuritySettings.PermitExtractContent = permitExtractContent;
+                    outputDocument.SecuritySettings.PermitFullQualityPrint = permitFullQualityPrint;
+                    outputDocument.SecuritySettings.PermitModifyDocument = permitModifyDocument;
+                    outputDocument.SecuritySettings.PermitPrint = permitPrint;
+                    outputDocument.SecuritySettings.PermitFormsFill = permitFormsFill;
+                }
+                int pgnr = 0;
 
                 foreach (String caleFisierPDF in caleFisierePDF)
                 {

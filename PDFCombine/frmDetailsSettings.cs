@@ -16,6 +16,7 @@ namespace PDFCombine
             InitializeComponent();
 
             GetInstalledFonts();
+            CheckSecurityOptions();
 
             colorPicker.BackColor = PDFCombine.Properties.Settings.Default.Details_TextColor;
             cbDetailsFont.Text = PDFCombine.Properties.Settings.Default.Details_Font;
@@ -30,6 +31,24 @@ namespace PDFCombine
             numericUpDownWatermarkSize.Value = PDFCombine.Properties.Settings.Default.Watermark_size;
             cbWatermarkLocation.Text = PDFCombine.Properties.Settings.Default.Watermark_Location;
             WatermarkUI(cbWatermarkEnable.Checked);
+
+            txtOwnerPassword.Text = PDFCombine.Properties.Settings.Default.ownerPassword;
+            txtUserPassword.Text = PDFCombine.Properties.Settings.Default.userPassword;
+
+            checkBoxPermitAnnotations.Checked = PDFCombine.Properties.Settings.Default.permitAnnotations;
+            checkBoxPermitContentCopyingforAccesibility.Checked = PDFCombine.Properties.Settings.Default.permitAccessibilityExtractContent;
+            checkBoxPermitDocumentAssembly.Checked = PDFCombine.Properties.Settings.Default.permitAssembleDocument;
+            checkBoxPermitExtractContent.Checked = PDFCombine.Properties.Settings.Default.permitExtractContent;
+            checkBoxPermitFullQualityPrinting.Checked = PDFCombine.Properties.Settings.Default.permitFullQualityPrint;
+            checkBoxPermitModifyDocument.Checked = PDFCombine.Properties.Settings.Default.permitModifyDocument;
+            checkBoxPermitPrinting.Checked = PDFCombine.Properties.Settings.Default.permitPrint;
+            checkBoxPermitFillingForms.Checked = PDFCombine.Properties.Settings.Default.PermitFormsFill;
+
+            txtTitle.Text = PDFCombine.Properties.Settings.Default.documentTitle;
+            txtAuthor.Text = PDFCombine.Properties.Settings.Default.documentAuthor;
+            txtSubject.Text = PDFCombine.Properties.Settings.Default.documentSubject;
+            txtKeywords.Text = PDFCombine.Properties.Settings.Default.documentKeywords;
+
         }
 
         private void WatermarkUI(bool enabled)
@@ -74,6 +93,23 @@ namespace PDFCombine
             PDFCombine.Properties.Settings.Default.Watermark_Font = cbWatermarkFont.Text;
             PDFCombine.Properties.Settings.Default.Watermark_size = numericUpDownWatermarkSize.Value;
             PDFCombine.Properties.Settings.Default.Watermark_Location = cbWatermarkLocation.Text;
+
+            PDFCombine.Properties.Settings.Default.ownerPassword =txtOwnerPassword.Text;
+            PDFCombine.Properties.Settings.Default.userPassword = txtUserPassword.Text;
+
+            PDFCombine.Properties.Settings.Default.permitAnnotations = checkBoxPermitAnnotations.Checked;
+            PDFCombine.Properties.Settings.Default.permitAccessibilityExtractContent = checkBoxPermitContentCopyingforAccesibility.Checked;
+            PDFCombine.Properties.Settings.Default.permitAssembleDocument = checkBoxPermitDocumentAssembly.Checked;
+            PDFCombine.Properties.Settings.Default.permitExtractContent = checkBoxPermitExtractContent.Checked;
+            PDFCombine.Properties.Settings.Default.permitFullQualityPrint = checkBoxPermitFullQualityPrinting.Checked;
+            PDFCombine.Properties.Settings.Default.permitModifyDocument = checkBoxPermitModifyDocument.Checked;
+            PDFCombine.Properties.Settings.Default.permitPrint = checkBoxPermitPrinting.Checked;
+            PDFCombine.Properties.Settings.Default.PermitFormsFill = checkBoxPermitFillingForms.Checked;
+
+            PDFCombine.Properties.Settings.Default.documentTitle = txtTitle.Text;
+            PDFCombine.Properties.Settings.Default.documentAuthor = txtAuthor.Text;
+            PDFCombine.Properties.Settings.Default.documentSubject = txtSubject.Text;
+            PDFCombine.Properties.Settings.Default.documentKeywords = txtKeywords.Text;
 
             PDFCombine.Properties.Settings.Default.Save();
         }
@@ -155,6 +191,19 @@ namespace PDFCombine
             lblWatermarkFontPreview.Text = txtWatermark.Text;
         }
 
+        private void txtOwnerPassword_TextChanged(object sender, EventArgs e)
+        {
+            CheckSecurityOptions();
+        }
+
+
+        private void CheckSecurityOptions()
+        {
+            if (txtOwnerPassword.Text != String.Empty)
+                panelSecurityOptions.Enabled = true;
+            else
+                panelSecurityOptions.Enabled = false;
+        }
      
 
     }

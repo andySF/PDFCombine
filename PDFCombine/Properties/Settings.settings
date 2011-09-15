@@ -32,5 +32,47 @@
     <Setting Name="Details_Size" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="documentTitle" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PDFCombine</Value>
+    </Setting>
+    <Setting Name="documentAuthor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PDFCombine</Value>
+    </Setting>
+    <Setting Name="documentSubject" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PDFCombine</Value>
+    </Setting>
+    <Setting Name="documentKeywords" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PDFCombine</Value>
+    </Setting>
+    <Setting Name="permitAccessibilityExtractContent" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="permitAnnotations" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="permitAssembleDocument" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="permitExtractContent" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="permitFullQualityPrint" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="permitModifyDocument" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="permitPrint" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ownerPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="userPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="PermitFormsFill" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

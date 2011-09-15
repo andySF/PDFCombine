@@ -136,5 +136,12 @@ namespace PDFCombine.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap tip {
+            get {
+                object obj = ResourceManager.GetObject("tip", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

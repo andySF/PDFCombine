@@ -104,12 +104,15 @@ namespace PDFCombine
             if (!backgroundWorkerAddItemsToList.IsBusy)
             {
                 SetUiForOperationInProgress(CanelOperationCallerEnum.Import);
+                //setting outside the ui methods the buttonremoveerror
+                btnRemoveErrors.Enabled = false;
                 backgroundWorkerAddItemsToList.RunWorkerAsync(path);
             }
         }
 
         private void backgroundWorkerAddItemsToList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            btnRemoveErrors.Enabled = true;
             if (noOfCurrentInvalidFiles != 0)
             {
                 noOfTotalErrorFiles += noOfCurrentInvalidFiles;
@@ -254,6 +257,8 @@ namespace PDFCombine
 
                 SetUiForOperationInProgress(CanelOperationCallerEnum.Combine);
                 
+                //disable btnremoveerrors while combining
+                btnRemoveErrors.Enabled = false;
                 backgroundWorkerCombine.RunWorkerAsync();
 
             }
@@ -284,6 +289,9 @@ namespace PDFCombine
 
         private void backgroundWorkerCombine_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            //enable btnremoveerrors 
+            btnRemoveErrors.Enabled = true;
+
             if (e.Cancelled)
             {
                 btnCancelOperation.Enabled = true;
@@ -378,7 +386,7 @@ namespace PDFCombine
 
         private void SetUiForOperationInProgress(CanelOperationCallerEnum _CanelOperationCaller)
         {
-            btnSettings.Visible = false;
+            btnSettings.Enabled = false;
             btnSelectPDFs.Enabled = false;
             btnCombinePDFs.Visible = false;
 
@@ -407,6 +415,7 @@ namespace PDFCombine
                 btnCancelOperation.Text = "Cancel Import";
             if (_CanelOperationCaller == CanelOperationCallerEnum.Combine)
                 btnCancelOperation.Text = "Cancel Combine";
+
         }
 
         private void SetUiBasedOnItemsInList()
@@ -426,10 +435,11 @@ namespace PDFCombine
             cbWriteDetails.Enabled = true;
             cbOpenFile.Enabled = true;
 
-            if (cbWriteDetails.Checked)
-                btnSettings.Visible = true;
-            if (!cbWriteDetails.Checked)
-                btnSettings.Visible = false;
+            btnSettings.Enabled = true;
+            //if (cbWriteDetails.Checked)
+            //    btnSettings.Visible = true;
+            //if (!cbWriteDetails.Checked)
+            //    btnSettings.Visible = false;
 
             if (noOfTotalErrorFiles != 0)
                 btnRemoveErrors.Visible = true;
@@ -512,10 +522,11 @@ namespace PDFCombine
             btnMoveItemUp.Enabled = false;
             btnRemoveFromList.Enabled = false;
 
-            btnRemoveErrors.Visible = false;
+           
+                btnRemoveErrors.Visible = false;
 
             cbWriteDetails.Enabled = false;
-            btnSettings.Visible = false;
+            btnSettings.Enabled = true;
 
             cbOpenFile.Enabled = false;
 
@@ -757,10 +768,10 @@ namespace PDFCombine
 
         private void cbWriteDetails_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbWriteDetails.Checked)
-                btnSettings.Visible=true;
-            if (!cbWriteDetails.Checked)
-                btnSettings.Visible = false;
+            //if (cbWriteDetails.Checked)
+            //    btnSettings.Visible=true;
+            //if (!cbWriteDetails.Checked)
+            //    btnSettings.Visible = false;
         }
 
         private void btnSettings_Click(object sender, EventArgs e)

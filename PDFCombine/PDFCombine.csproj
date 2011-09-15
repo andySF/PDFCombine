@@ -108,6 +108,7 @@
     <None Include="Resources\page_white_wrench.png" />
     <None Include="Resources\page_white_add.png" />
     <None Include="Resources\information.png" />
+    <None Include="Resources\tip.png" />
     <Content Include="UI LOGIC.txt" />
     <Content Include="File-Pdf.ico" />
     <Content Include="TODO.txt" />

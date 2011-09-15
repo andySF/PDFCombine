@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="txtInfo.Text" xml:space="preserve">
+    <value>If the owner password exist, then the document will open with selected restrictions. If the user password exist, then the document will reqire a password on opening. If both exist, the user can enter the owner password to remove all restrictions or the user password to open the restricted document .</value>
+  </data>
 </root>
