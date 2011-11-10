@@ -6,16 +6,28 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Text;
+using System.Threading;
 
 namespace PDFCombine
 {
     public partial class frmDetailsSettings : Form
     {
+        BackgroundWorker readFonts;
         public frmDetailsSettings()
         {
             InitializeComponent();
 
-            GetInstalledFonts();
+            //loading fonts message
+            cbDetailsFont.Items.Add("Loading Fonts...");
+            cbDetailsFont.SelectedIndex = 0;
+            cbWatermarkFont.Items.Add("Loading Fonts...");
+            cbWatermarkFont.SelectedIndex = 0;
+
+            readFonts = new BackgroundWorker();
+            readFonts.DoWork += new DoWorkEventHandler(readFonts_DoWork);
+            readFonts.RunWorkerCompleted += new RunWorkerCompletedEventHandler(readFonts_RunWorkerCompleted);
+            readFonts.RunWorkerAsync();
+
             CheckSecurityOptions();
 
             colorPicker.BackColor = PDFCombine.Properties.Settings.Default.Details_TextColor;
@@ -50,6 +62,57 @@ namespace PDFCombine
             txtKeywords.Text = PDFCombine.Properties.Settings.Default.documentKeywords;
 
         }
+
+        #region fonts methods
+
+        private delegate void AddFontCallback(String itm);
+        private void AddFont(String itm)
+        {
+            if (cbDetailsFont.InvokeRequired || cbWatermarkFont.InvokeRequired)
+            {
+                AddFontCallback d = new AddFontCallback(AddFont);
+                this.Invoke(d, new object[] { itm });
+            }
+            else
+            {
+                cbDetailsFont.Items.Add(itm);
+                cbWatermarkFont.Items.Add(itm);
+            }
+        }
+        void readFonts_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //cleaning loading message
+            cbWatermarkFont.Items.RemoveAt(0);
+            cbDetailsFont.Items.RemoveAt(0);
+            cbWatermarkFont.SelectedIndex = 0;
+            cbDetailsFont.SelectedIndex = 0;
+        }
+
+        void readFonts_DoWork(object sender, DoWorkEventArgs e)
+        {
+            //Thread.Sleep(5000); //time consuming task...
+            InstalledFontCollection fonts = new InstalledFontCollection();
+            for (int i = 0; i < fonts.Families.Length; i++)
+            {
+                AddFont(fonts.Families[i].Name);
+            }
+        }
+
+        private bool IsStyleSupported(String familyName, FontStyle style)
+        {
+            try
+            {
+                Font f = new Font(familyName, 10, style);
+                f.Dispose();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion 
 
         private void WatermarkUI(bool enabled)
         {
@@ -114,33 +177,6 @@ namespace PDFCombine
             PDFCombine.Properties.Settings.Default.Save();
         }
 
-        #region fonts methods
-        private void GetInstalledFonts()
-        {
-            InstalledFontCollection fonts = new InstalledFontCollection();
-            for (int i = 0; i < fonts.Families.Length; i++)
-            {
-                cbDetailsFont.Items.Add(fonts.Families[i].Name);
-                cbWatermarkFont.Items.Add(fonts.Families[i].Name);
-            }
-        }
-
-        private bool IsStyleSupported( String familyName,  FontStyle style)
-        {
-            try
-            {
-                Font f = new Font(familyName, 10, style);
-                f.Dispose();
-                return true;
-            }
-            catch 
-            {
-                return false;
-            }
-        }
-
-        #endregion 
-
         private void cbDetailsFont_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -195,7 +231,6 @@ namespace PDFCombine
         {
             CheckSecurityOptions();
         }
-
 
         private void CheckSecurityOptions()
         {

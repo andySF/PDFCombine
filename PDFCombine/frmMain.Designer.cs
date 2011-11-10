@@ -43,9 +43,7 @@
             this.lblProgress = new System.Windows.Forms.Label();
             this.backgroundWorkerCombine = new System.ComponentModel.BackgroundWorker();
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
-            this.lblInfo = new System.Windows.Forms.Label();
             this.btnInfo = new System.Windows.Forms.Button();
-            this.btnSettings = new System.Windows.Forms.Button();
             this.btnRemoveErrors = new System.Windows.Forms.Button();
             this.btnCancelOperation = new System.Windows.Forms.Button();
             this.btnMoveItemUp = new System.Windows.Forms.Button();
@@ -54,6 +52,8 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.btnCombinePDFs = new System.Windows.Forms.Button();
             this.btnSelectPDFs = new System.Windows.Forms.Button();
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.btnSettings = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openPdfDialog
@@ -171,16 +171,6 @@
             this.backgroundWorkerCombine.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerCombine_RunWorkerCompleted);
             this.backgroundWorkerCombine.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerCombine_ProgressChanged);
             // 
-            // lblInfo
-            // 
-            this.lblInfo.AutoSize = true;
-            this.lblInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInfo.Location = new System.Drawing.Point(780, 472);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(45, 16);
-            this.lblInfo.TabIndex = 13;
-            this.lblInfo.Text = "label1";
-            // 
             // btnInfo
             // 
             this.btnInfo.Image = global::PDFCombine.Properties.Resources.information;
@@ -191,19 +181,6 @@
             this.toolTipInfo.SetToolTip(this.btnInfo, "Remove selected files");
             this.btnInfo.UseVisualStyleBackColor = true;
             this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
-            // 
-            // btnSettings
-            // 
-            this.btnSettings.Image = global::PDFCombine.Properties.Resources.page_white_wrench;
-            this.btnSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSettings.Location = new System.Drawing.Point(291, 16);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(70, 31);
-            this.btnSettings.TabIndex = 14;
-            this.btnSettings.Text = "Settings";
-            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // btnRemoveErrors
             // 
@@ -307,6 +284,29 @@
             this.btnSelectPDFs.UseVisualStyleBackColor = true;
             this.btnSelectPDFs.Click += new System.EventHandler(this.btnSelectPDFs_Click);
             // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInfo.Location = new System.Drawing.Point(780, 472);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(45, 16);
+            this.lblInfo.TabIndex = 13;
+            this.lblInfo.Text = "label1";
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.Image = global::PDFCombine.Properties.Resources.page_white_wrench;
+            this.btnSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSettings.Location = new System.Drawing.Point(291, 16);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(70, 31);
+            this.btnSettings.TabIndex = 14;
+            this.btnSettings.Text = "Settings";
+            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -330,7 +330,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(780, 500);
             this.Name = "frmMain";
-            this.Text = "PDFCombine 1.3 - http://www.olteteanu.com";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

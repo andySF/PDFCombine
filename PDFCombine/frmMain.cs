@@ -15,7 +15,6 @@ namespace PDFCombine
     {
         FileUtils Files = new FileUtils();
         ListViewItem item;
-        //SortedList<int, String> caleFisierePDF = new SortedList<int, string>();
         List<String> caleFisierePDF = new List<string>();
         string totalFilesForImport = string.Empty;
         String unsupportedPDF = "unsupported";
@@ -38,6 +37,8 @@ namespace PDFCombine
             checkUpdateThread = new System.Threading.Thread(CheckForUpdate);
             checkUpdateThread.SetApartmentState(System.Threading.ApartmentState.STA);
             checkUpdateThread.Start();
+
+            this.Text ="PDFCombine "+ System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " - http://www.olteteanu.com";
         }
 
         private void frmMain_Load(object sender, EventArgs e)

@@ -16,8 +16,6 @@ namespace PDFCombine
         {
             InitializeComponent();
      
-
-
             try
             {
                 Assembly creditAssm = Assembly.GetExecutingAssembly();
